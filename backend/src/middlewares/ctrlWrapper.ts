@@ -1,0 +1,16 @@
+import { Request } from '@types';
+import { Response, NextFunction } from 'express';
+
+type Controller = (req: Request, res: Response, next: NextFunction) => void;
+
+const ctrlWrapper = (ctrl: Controller) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await ctrl(req, res, next);
+    } catch (error) {
+      next(error);
+    }
+  };
+};
+
+export default ctrlWrapper;
