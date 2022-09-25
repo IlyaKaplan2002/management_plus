@@ -1,0 +1,11 @@
+{
+  "name": "management_plus",
+  "version": "1.0.0",
+  "description": "Diploma project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ilya Kaplan",
+  "license": "ISC"
+}

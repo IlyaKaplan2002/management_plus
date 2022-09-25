@@ -1,0 +1,35 @@
+{
+  "presets": [
+    "@babel/typescript",
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    "babel-plugin-transform-typescript-metadata",
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose": true }],
+    ["@babel/plugin-proposal-private-methods", { "loose": true }],
+    "@babel/proposal-object-rest-spread",
+    [
+      "module-resolver",
+      {
+        "root": ["./src"],
+        "alias": {
+          "@config": "./src/config",
+          "@modules": "./src/modules",
+          "@services": "./src/services",
+          "@helpers": "./src/helpers",
+          "@middlewares": "./src/middlewares",
+          "@types": "./src/types",
+          "@utils": "./src/utils"
+        }
+      }
+    ]
+  ]
+}
