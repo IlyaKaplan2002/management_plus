@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "baseUrl": "./src",
-    "target": "es5",
+    "target": "ES2022",
+    "module": "ES2022",
     "paths": {
       "@config/*": ["config/*"],
       "@modules/*": ["modules/*"],
@@ -15,6 +16,7 @@
     "sourceMap": true,
     "outDir": "dist",
     "lib": ["esnext", "dom"],
+    "moduleResolution": "node",
     "noImplicitAny": true,
     "noImplicitThis": true,
     "alwaysStrict": true,

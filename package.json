@@ -4,8 +4,20 @@
   "description": "Diploma project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "installation": "yarn && cd ./backend && yarn && cd ../frontend && yarn",
+    "start:server:dev": "cd ./backend && yarn start:dev",
+    "start:front:dev": "cd ./frontend && yarn start:dev",
+    "start:dev": "concurrently --kill-others \"yarn start:server:dev\" \"yarn start:front:dev\"",
+    "build:server": "cd ./backend && yarn build",
+    "build:front": "cd ./frontend && yarn build",
+    "start:server": "cd ./backend && yarn start",
+    "start:front": "cd ./frontend && yarn start",
+    "build": "yarn build:server && yarn build:front",
+    "start": "concurrently --kill-others \"yarn start:server\" \"yarn start:front\""
   },
   "author": "Ilya Kaplan",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^7.4.0"
+  }
 }

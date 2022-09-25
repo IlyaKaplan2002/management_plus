@@ -22,10 +22,6 @@ const getDbConfig = (): PostgresConnectionOptions => ({
     NODE_ENV === 'production'
       ? ['dist/migrations/**/*.js']
       : ['src/migrations/**/*.ts'],
-  subscribers:
-    NODE_ENV === 'production'
-      ? ['dist/modules/**/*.subscriber.js']
-      : ['src/modules/**/*.subscriber.ts'],
   logging: 'all',
   logger: 'simple-console',
   maxQueryExecutionTime: 5000,
