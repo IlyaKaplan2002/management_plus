@@ -18,10 +18,10 @@ const auth = (tokenName?: 'token' | 'refreshToken') =>
       throwError('Token was not provided', 401);
     }
 
-    const id = verifyToken(token);
+    const { id, error } = verifyToken(token);
 
-    if (!id) {
-      throwError('Token is invalid', 401);
+    if (error) {
+      throwError(error, 401);
     }
 
     const user = await UserService.findById(id);
