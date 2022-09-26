@@ -189,6 +189,7 @@ RegisterForm.Container = styled.form`
 
   .button {
     margin-bottom: 10px;
+    height: 37px;
   }
 
   .link {
