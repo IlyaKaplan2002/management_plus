@@ -15,6 +15,7 @@ const createResponse = ({
     code,
     message,
     data,
+    status: 'success',
   });
 
 export default createResponse;
