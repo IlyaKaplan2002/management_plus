@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import logger from 'morgan';
 import { Error } from '@types';
-import { authRouter, projectRouter } from '@modules/index';
+import { authRouter, projectRouter, userRouter } from '@modules/index';
 
 const app = express();
 
@@ -15,6 +15,7 @@ app.use(logger(formatsLogger));
 
 app.use('/auth', authRouter);
 app.use('/project', projectRouter);
+app.use('/user', userRouter);
 
 app.use((req: Request, res: Response) => {
   res.status(404).json({ status: 'failed', code: 404, message: 'Not found' });

@@ -1,13 +1,21 @@
 import Login from 'modules/auth/pages/Login';
 import Register from 'modules/auth/pages/Register';
 import Dashboard from 'modules/dashboard/pages/Dashboard';
+import Home from 'modules/home/pages/Home';
 import { RouteItem } from './types';
 
 export const routes: { [key: string]: RouteItem } = {
   home: {
+    name: 'Home',
+    element: Home,
+    path: '/',
+    isProtected: true,
+    redirect: '/login',
+  },
+  dashboard: {
     name: 'Dashboard',
     element: Dashboard,
-    path: '/',
+    path: '/dashboard',
     isProtected: true,
     redirect: '/login',
   },

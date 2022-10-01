@@ -128,11 +128,14 @@ const reducer = createReducer(initialState, {
     return initialState;
   },
 
-  'persist/REHYDRATE': (_, action: Action) => {
-    const { token } = action.payload;
+  'persist/REHYDRATE': (state: AuthState, action: Action) => {
+    const { payload } = action;
+    if (!payload) return { ...state };
+    const { token } = payload;
     if (token) {
       setToken(token);
     }
+    return { ...state };
   },
 });
 

@@ -1,16 +1,6 @@
-import { Button } from '@mui/material';
+import DefaultLayout from 'components/DefaultLayout';
 import React from 'react';
-import { useAppDispatch } from 'store';
-import { authActions } from 'store/auth';
 
-const Dashboard = () => {
-  const dispatch = useAppDispatch();
-
-  return (
-    <>
-      <Button onClick={() => dispatch(authActions.logout())}>logout</Button>
-    </>
-  );
-};
+const Dashboard = () => <DefaultLayout>test</DefaultLayout>;
 
 export default Dashboard;
