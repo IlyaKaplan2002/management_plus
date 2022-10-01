@@ -1,6 +1,4 @@
 import {
-  Alert,
-  AlertTitle,
   Button,
   CircularProgress,
   FormControl,
@@ -9,7 +7,6 @@ import {
   Input,
   InputAdornment,
   InputLabel,
-  Snackbar,
   Typography,
 } from '@mui/material';
 import { useFormik } from 'formik';
@@ -23,6 +20,7 @@ import { registerSchema } from '../schemas/register';
 import { Link } from 'react-router-dom';
 import { routes } from 'modules/router/constants';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import ErrorAlert from 'components/ErrorAlert';
 
 const initialValues = {
   email: '',
@@ -193,16 +191,7 @@ const RegisterForm = () => {
         Already have an account? Log in right now
       </Typography>
 
-      <Snackbar
-        open={Boolean(error) && open}
-        autoHideDuration={6000}
-        onClose={() => setOpen(false)}
-      >
-        <Alert severity="error" onClose={() => setOpen(false)}>
-          <AlertTitle>Error</AlertTitle>
-          {error}
-        </Alert>
-      </Snackbar>
+      <ErrorAlert open={open} error={error} setOpen={setOpen} />
     </RegisterForm.Container>
   );
 };

@@ -9,11 +9,16 @@ import {
   useScrollTrigger,
 } from '@mui/material';
 import styled from 'styled-components';
-import React, { useState, MouseEvent, useCallback } from 'react';
+import React, { useState, MouseEvent, useCallback, useEffect } from 'react';
 import { AccountCircle } from '@mui/icons-material';
 import { useAppDispatch } from 'store/index';
 import { authActions } from 'store/auth';
 import { useNavigate } from 'react-router-dom';
+import Loader from './Loader';
+import { useSelector } from 'react-redux';
+import ProjectsSelectors from '../store/projects/projects.selectors';
+import ProjectsActions from '../store/projects/projects.actions';
+import ErrorAlert from './ErrorAlert';
 
 const HideOnScroll = ({ children }) => {
   const trigger = useScrollTrigger();
@@ -27,6 +32,10 @@ const HideOnScroll = ({ children }) => {
 
 const DefaultLayout = ({ children }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [open, setOpen] = useState<boolean>(false);
+
+  const projectsLoading = useSelector(ProjectsSelectors.getLoading);
+  const projectsError = useSelector(ProjectsSelectors.getError);
 
   const navigate = useNavigate();
 
@@ -44,6 +53,15 @@ const DefaultLayout = ({ children }) => {
   }, [dispatch, onClose]);
 
   const onLogoClick = useCallback(() => navigate('/'), [navigate]);
+
+  const fetchProjects = useCallback(async () => {
+    await dispatch(ProjectsActions.get());
+    setOpen(true);
+  }, [dispatch]);
+
+  useEffect(() => {
+    fetchProjects();
+  }, [fetchProjects]);
 
   return (
     <>
@@ -86,13 +104,17 @@ const DefaultLayout = ({ children }) => {
           </DefaultLayout.Bar>
         </AppBar>
       </HideOnScroll>
-      <DefaultLayout.MainWrapper>{children}</DefaultLayout.MainWrapper>
+      <DefaultLayout.MainWrapper>
+        {projectsLoading ? <Loader /> : children}
+      </DefaultLayout.MainWrapper>
+
+      <ErrorAlert open={open} error={projectsError} setOpen={setOpen} />
     </>
   );
 };
 
 DefaultLayout.MainWrapper = styled.div`
-  padding-top: 64px;
+  padding: 92px 50px;
 `;
 
 DefaultLayout.Logo = styled(Typography)`

@@ -1,14 +1,20 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { LoginProps, RegisterProps } from './auth.types';
-import AuthAPI from '../../api/auth';
-import { setToken } from '../../api/index';
+import {
+  GET_CURRENT_USER,
+  LOGIN,
+  LoginProps,
+  LOGOUT,
+  REFRESH_TOKEN,
+  REGISTER,
+  RegisterProps,
+} from './auth.types';
+import AuthAPI from 'api/auth';
+import { setToken } from 'api/index';
 import { RootState } from '../types';
-
-export const namespace = 'AUTH';
 
 export default class AuthActions {
   public static login = createAsyncThunk(
-    `${namespace}/LOGIN`,
+    LOGIN,
     async (data: LoginProps, thunkAPI) => {
       const response = await AuthAPI.login(data);
       if (response.status === 'failed') {
@@ -20,7 +26,7 @@ export default class AuthActions {
   );
 
   public static register = createAsyncThunk(
-    `${namespace}/REGISTER`,
+    REGISTER,
     async (data: RegisterProps, thunkAPI) => {
       const response = await AuthAPI.register(data);
       if (response.status === 'failed') {
@@ -32,7 +38,7 @@ export default class AuthActions {
   );
 
   public static refreshToken = createAsyncThunk(
-    `${namespace}/REFRESH_TOKEN`,
+    REFRESH_TOKEN,
     async (_, thunkAPI) => {
       const state = thunkAPI.getState() as RootState;
       const { refreshToken } = state.auth;
@@ -52,7 +58,7 @@ export default class AuthActions {
   );
 
   public static getCurrentUser = createAsyncThunk(
-    `${namespace}/GET_CURRENT_USER`,
+    GET_CURRENT_USER,
     async (_, thunkAPI) => {
       const response = await AuthAPI.getCurrentUser();
 
@@ -64,11 +70,8 @@ export default class AuthActions {
     },
   );
 
-  public static logout = createAsyncThunk(
-    `${namespace}/LOGOUT`,
-    async (_, thunkAPI) => {
-      await AuthAPI.logout();
-      thunkAPI.fulfillWithValue(null);
-    },
-  );
+  public static logout = createAsyncThunk(LOGOUT, async (_, thunkAPI) => {
+    await AuthAPI.logout();
+    thunkAPI.fulfillWithValue(null);
+  });
 }

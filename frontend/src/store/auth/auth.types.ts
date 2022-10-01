@@ -1,8 +1,9 @@
 export const namespace = 'AUTH';
 export const LOGIN = `${namespace}/LOGIN`;
+export const REGISTER = `${namespace}/REGISTER`;
 export const LOGOUT = `${namespace}/LOGOUT`;
+export const GET_CURRENT_USER = `${namespace}/GET_CURRENT_USER`;
 export const REFRESH_TOKEN = `${namespace}/REFRESH_TOKEN`;
-export const SET_USER = `${namespace}/SET_USER`;
 
 export interface User {
   firstName: string;

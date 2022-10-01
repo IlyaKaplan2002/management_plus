@@ -4,7 +4,7 @@ import { persistReducer, PersistConfig } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import authActions from './auth.actions';
 import { Action } from 'store/types';
-import { setToken, removeToken } from '../../api/index';
+import { setToken, removeToken } from 'api/index';
 
 const persistConfig: PersistConfig<AuthState> = {
   key: 'root',

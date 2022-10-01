@@ -1,3 +1,4 @@
+import GlobalStyle from 'components/GlobalStyles';
 import useAuth from 'hooks/useAuth';
 import Router from 'modules/router/containers/Router';
 import React, { useCallback, useEffect } from 'react';
@@ -21,6 +22,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <GlobalStyle />
       <Router />
     </BrowserRouter>
   );
