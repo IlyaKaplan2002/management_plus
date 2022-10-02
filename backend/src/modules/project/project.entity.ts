@@ -14,6 +14,9 @@ export class Project extends BaseEntity {
   @Column({ name: 'user_id' })
   public userId: string;
 
+  @Column({ name: 'last_update', type: 'timestamptz' })
+  public lastUpdate: Date;
+
   public toJSON = () =>
     JSON.stringify({
       id: this.id,

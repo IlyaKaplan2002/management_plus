@@ -6,12 +6,15 @@ import { Typography } from '@mui/material';
 
 interface ProjectItemProps {
   project?: Project;
-  add?: boolean;
+  add?: (value: boolean) => void;
 }
 
 const ProjectsItem = ({ project, add }: ProjectItemProps) => (
-  <ProjectsItem.Container add={add}>
-    {add ? (
+  <ProjectsItem.Container
+    add={Boolean(add)}
+    onClick={Boolean(add) && add ? () => add(true) : () => console.log('here')}
+  >
+    {Boolean(add) ? (
       <>
         <Add className="addIcon" />
         <Typography variant="subtitle2" className="addText">

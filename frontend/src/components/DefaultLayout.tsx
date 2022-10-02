@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import ProjectsSelectors from '../store/projects/projects.selectors';
 import ProjectsActions from '../store/projects/projects.actions';
 import ErrorAlert from './ErrorAlert';
+import useAuth from 'hooks/useAuth';
 
 const HideOnScroll = ({ children }) => {
   const trigger = useScrollTrigger();
@@ -34,6 +35,8 @@ const DefaultLayout = ({ children }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState<boolean>(false);
 
+  const { isLoggedIn } = useAuth();
+
   const projectsLoading = useSelector(ProjectsSelectors.getLoading);
   const projectsError = useSelector(ProjectsSelectors.getError);
 
@@ -48,9 +51,10 @@ const DefaultLayout = ({ children }) => {
   const onClose = useCallback(() => setAnchorEl(null), []);
 
   const onLogout = useCallback(() => {
+    if (!isLoggedIn) return;
     dispatch(authActions.logout());
     onClose();
-  }, [dispatch, onClose]);
+  }, [dispatch, onClose, isLoggedIn]);
 
   const onLogoClick = useCallback(() => navigate('/'), [navigate]);
 

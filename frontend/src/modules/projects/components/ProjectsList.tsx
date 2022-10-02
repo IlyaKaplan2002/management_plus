@@ -5,11 +5,12 @@ import ProjectsItem from './ProjectsItem';
 
 interface ProjectsListProps {
   projects: { [key: string]: Project };
+  setAddOpen: (value: boolean) => void;
 }
 
-const ProjectsList = ({ projects }: ProjectsListProps) => (
+const ProjectsList = ({ projects, setAddOpen }: ProjectsListProps) => (
   <ProjectsList.Container>
-    <ProjectsItem add />
+    <ProjectsItem add={setAddOpen} />
     {Object.keys(projects).map(key => (
       <ProjectsItem key={key} project={projects[key]} />
     ))}

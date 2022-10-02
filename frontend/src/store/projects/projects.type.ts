@@ -8,7 +8,11 @@ export interface ProjectCreate {
   description: string;
 }
 
-export type Project = ProjectCreate & { id: string; userId: string };
+export type Project = ProjectCreate & {
+  id: string;
+  userId: string;
+  lastUpdate: Date;
+};
 
 export interface ProjectsState {
   items: {

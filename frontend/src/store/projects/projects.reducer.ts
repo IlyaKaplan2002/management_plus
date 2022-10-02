@@ -40,7 +40,7 @@ const reducer = createReducer(initialState, {
     action: Action,
   ) => ({
     ...state,
-    items: { ...state.items, [action.payload.id]: action.payload },
+    items: { [action.payload.id]: action.payload, ...state.items },
     loading: false,
   }),
   [projectsActions.create.rejected.type]: (

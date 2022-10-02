@@ -30,7 +30,7 @@ export default class ProjectsActions {
         return thunkAPI.rejectWithValue(response.message);
       }
 
-      return thunkAPI.fulfillWithValue(response.data);
+      return thunkAPI.fulfillWithValue(response.data.project);
     },
   );
 }

@@ -2,14 +2,14 @@ import { Project } from './project.entity';
 
 export default class ProjectService {
   public static create = async (data: Project) => {
-    const project = Project.save(data);
+    const project = Project.save({ ...data, lastUpdate: new Date() });
     return project;
   };
 
   public static update = async (data: any, id: string) => {
     const result = await Project.createQueryBuilder()
       .update()
-      .set(data)
+      .set({ ...data, lastUpdate: new Date() })
       .where('id = :id', { id })
       .returning('*')
       .execute();
@@ -38,6 +38,8 @@ export default class ProjectService {
 
   public static findByUserId = async (userId: string) => {
     const projects = await Project.findBy({ userId });
-    return projects;
+    return projects.sort(
+      (a, b) => b.lastUpdate.getTime() - a.lastUpdate.getTime(),
+    );
   };
 }

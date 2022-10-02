@@ -3,5 +3,6 @@ export interface RouteItem {
   path: string;
   element: () => JSX.Element;
   isProtected: boolean;
+  isRestricted: boolean;
   redirect: string;
 }
