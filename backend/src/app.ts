@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(logger(formatsLogger));
 
 app.use('/auth', authRouter);
-app.use('/project', projectRouter);
+app.use('/projects', projectRouter);
 app.use('/user', userRouter);
 
 app.use((req: Request, res: Response) => {

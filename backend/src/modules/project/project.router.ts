@@ -4,6 +4,7 @@ import validate from '@middlewares/validate';
 import { Router } from 'express';
 import ProjectController from './project.controller';
 import ProjectSchema from './project.schema';
+import statisticsRouter from '../statistics';
 
 const router = Router();
 
@@ -24,5 +25,7 @@ router.put(
 );
 
 router.delete('/:id', auth(), ctrlWrapper(ProjectController.delete));
+
+router.use('/:project/statistics', statisticsRouter);
 
 export default router;

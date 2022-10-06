@@ -3,36 +3,45 @@ import styled from 'styled-components';
 import { Project } from 'store/projects/projects.type';
 import { Add, BarChart } from '@mui/icons-material';
 import { Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 interface ProjectItemProps {
   project?: Project;
   add?: (value: boolean) => void;
 }
 
-const ProjectsItem = ({ project, add }: ProjectItemProps) => (
-  <ProjectsItem.Container
-    add={Boolean(add)}
-    onClick={Boolean(add) && add ? () => add(true) : () => console.log('here')}
-  >
-    {Boolean(add) ? (
-      <>
-        <Add className="addIcon" />
-        <Typography variant="subtitle2" className="addText">
-          Add project
-        </Typography>
-      </>
-    ) : (
-      <>
-        <div>
-          <Typography variant="subtitle1">{project?.name}</Typography>
-          <Typography variant="body2">{project?.description}</Typography>
-        </div>
+const ProjectsItem = ({ project, add }: ProjectItemProps) => {
+  const navigate = useNavigate();
 
-        <BarChart className="itemIcon" />
-      </>
-    )}
-  </ProjectsItem.Container>
-);
+  return (
+    <ProjectsItem.Container
+      add={Boolean(add)}
+      onClick={
+        Boolean(add) && add
+          ? () => add(true)
+          : () => navigate(`/projects/${project?.id}`)
+      }
+    >
+      {Boolean(add) ? (
+        <>
+          <Add className="addIcon" />
+          <Typography variant="subtitle2" className="addText">
+            Add project
+          </Typography>
+        </>
+      ) : (
+        <>
+          <div>
+            <Typography variant="subtitle1">{project?.name}</Typography>
+            <Typography variant="body2">{project?.description}</Typography>
+          </div>
+
+          <BarChart className="itemIcon" />
+        </>
+      )}
+    </ProjectsItem.Container>
+  );
+};
 
 ProjectsItem.Container = styled.li<{ add?: boolean }>`
   cursor: pointer;

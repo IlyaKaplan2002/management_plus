@@ -22,9 +22,11 @@ export default class ProjectController {
   };
 
   public static update = async (req: Request, res: Response) => {
+    const { id: userId } = req.user;
     const { id } = req.params;
-    const { userId } = await ProjectService.findById(id);
-    if (userId !== req.user.id) throwError('Project not found', 404);
+    const oldProject = await ProjectService.findById(id);
+    if (!oldProject || oldProject.userId !== userId)
+      throwError('Project not found', 404);
     const project = await ProjectService.update({ ...req.body }, id);
 
     createResponse({
@@ -41,9 +43,11 @@ export default class ProjectController {
   };
 
   public static delete = async (req: Request, res: Response) => {
+    const { id: userId } = req.user;
     const { id } = req.params;
-    const { userId } = await ProjectService.findById(id);
-    if (userId !== req.user.id) throwError('Project not found', 404);
+    const project = await ProjectService.findById(id);
+    if (!project || project.userId !== userId)
+      throwError('Project not found', 404);
     const result = await ProjectService.delete(id);
     if (!result) throwError('Failed', 500);
 

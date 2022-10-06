@@ -7,7 +7,7 @@ import { API } from 'api';
 export default class ProjectsAPI {
   public static get = requestWrapper(
     async (): Promise<APIResponse | AxiosError<APIResponse>> => {
-      const response = await API.get('/project');
+      const response = await API.get('/projects');
       return response.data;
     },
   );
@@ -16,7 +16,7 @@ export default class ProjectsAPI {
     async (
       data: ProjectCreate,
     ): Promise<APIResponse | AxiosError<APIResponse>> => {
-      const response = await API.post('/project', data);
+      const response = await API.post('/projects', data);
       return response.data;
     },
   );
