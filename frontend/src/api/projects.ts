@@ -1,4 +1,4 @@
-import { ProjectCreate } from 'store/projects/projects.type';
+import { ProjectCreate } from 'store/projects/projects.types';
 import { requestWrapper } from './utils';
 import { APIResponse } from './types';
 import { AxiosError } from 'axios';

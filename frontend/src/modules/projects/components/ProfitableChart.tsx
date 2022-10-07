@@ -11,7 +11,7 @@ import {
   YAxis,
 } from 'recharts';
 
-const ProjectChart = () => {
+const ProfitableChart = () => {
   const data: {
     label: string;
     Profitability: number;
@@ -30,7 +30,7 @@ const ProjectChart = () => {
   }
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height="50%">
       <BarChart data={data} barGap={0} barCategoryGap={0} barSize={20}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
@@ -55,4 +55,4 @@ const ProjectChart = () => {
   );
 };
 
-export default ProjectChart;
+export default ProfitableChart;

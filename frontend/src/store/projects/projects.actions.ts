@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import ProjectsAPI from 'api/projects';
-import { CREATE, GET, ProjectCreate, Project } from './projects.type';
+import { CREATE, GET, ProjectCreate, Project } from './projects.types';
 
 export default class ProjectsActions {
   public static get = createAsyncThunk(GET, async (_, thunkAPI) => {

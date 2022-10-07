@@ -19,5 +19,6 @@ export interface ProjectsState {
     [key: string]: Project;
   };
   loading: boolean;
+  fetched: boolean;
   error: string | null;
 }

@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useFormik } from 'formik';
 import styled from 'styled-components';
 import { firstStepSchema } from '../../schemas/firstStep';
-import { ProjectCreate } from '../../../../store/projects/projects.type';
+import { ProjectCreate } from 'store/projects/projects.types';
 import {
   Button,
   FormControl,
@@ -90,7 +90,7 @@ const FirstStep = ({ setStep, data, setData, onCreate }: FirstStepProps) => {
           !Boolean(formik.values.description)
         }
       >
-        Next
+        Create
       </Button>
     </FirstStep.Container>
   );

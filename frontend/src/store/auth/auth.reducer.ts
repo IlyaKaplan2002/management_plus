@@ -25,7 +25,7 @@ const reducer = createReducer(initialState, {
     ...state,
     loading: true,
   }),
-  [authActions.login.rejected.type]: (state: AuthState, action: Action) => ({
+  [authActions.login.rejected.type]: (_, action: Action) => ({
     ...initialState,
     error: action.payload,
   }),
@@ -45,7 +45,7 @@ const reducer = createReducer(initialState, {
     ...state,
     loading: true,
   }),
-  [authActions.register.rejected.type]: (state: AuthState, action: Action) => ({
+  [authActions.register.rejected.type]: (_, action: Action) => ({
     ...initialState,
     error: action.payload,
   }),
@@ -61,17 +61,11 @@ const reducer = createReducer(initialState, {
     };
   },
 
-  [authActions.getCurrentUser.pending.type]: (
-    state: AuthState,
-    action: Action,
-  ) => ({
+  [authActions.getCurrentUser.pending.type]: (state: AuthState) => ({
     ...state,
     loading: true,
   }),
-  [authActions.getCurrentUser.rejected.type]: (
-    state: AuthState,
-    action: Action,
-  ) => {
+  [authActions.getCurrentUser.rejected.type]: () => {
     removeToken();
     return initialState;
   },
@@ -90,17 +84,11 @@ const reducer = createReducer(initialState, {
     };
   },
 
-  [authActions.refreshToken.pending.type]: (
-    state: AuthState,
-    action: Action,
-  ) => ({
+  [authActions.refreshToken.pending.type]: (state: AuthState) => ({
     ...state,
     loading: true,
   }),
-  [authActions.refreshToken.rejected.type]: (
-    state: AuthState,
-    action: Action,
-  ) => {
+  [authActions.refreshToken.rejected.type]: () => {
     removeToken();
     return initialState;
   },
@@ -123,6 +111,10 @@ const reducer = createReducer(initialState, {
     ...state,
     loading: true,
   }),
+  [authActions.logout.rejected.type]: () => {
+    removeToken();
+    return initialState;
+  },
   [authActions.logout.fulfilled.type]: () => {
     removeToken();
     return initialState;

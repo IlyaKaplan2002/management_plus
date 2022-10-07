@@ -1,4 +1,5 @@
-export const namespace = 'AUTH';
+const namespace = 'AUTH';
+
 export const LOGIN = `${namespace}/LOGIN`;
 export const REGISTER = `${namespace}/REGISTER`;
 export const LOGOUT = `${namespace}/LOGOUT`;

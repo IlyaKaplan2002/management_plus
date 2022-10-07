@@ -2,13 +2,13 @@ import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { IconButton, Slide, Typography } from '@mui/material';
 import { Close } from '@mui/icons-material';
-import FirstStep from './steps/FirstStep';
-import { useAppDispatch } from '../../../store/index';
-import ProjectsActions from '../../../store/projects/projects.actions';
-import { ProjectCreate } from '../../../store/projects/projects.type';
+import FirstStep from '../forms/steps/FirstStep';
+import { useAppDispatch } from 'store/index';
+import ProjectsActions from 'store/projects/projects.actions';
+import { ProjectCreate } from 'store/projects/projects.types';
 import ErrorAlert from 'components/ErrorAlert';
 import { useSelector } from 'react-redux';
-import ProjectsSelectors from '../../../store/projects/projects.selectors';
+import ProjectsSelectors from 'store/projects/projects.selectors';
 
 interface AddProjectProps {
   open: boolean;
@@ -51,7 +51,7 @@ const AddProject = ({ open, setOpen }: AddProjectProps) => {
               <Close color="action" />
             </IconButton>
             <AddProject.Steps variant="subtitle1">
-              Create project (Step {step} of 3)
+              Create project (Step {step} of 1)
             </AddProject.Steps>
           </AddProject.TopWrapper>
 

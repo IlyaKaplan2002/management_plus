@@ -11,6 +11,7 @@ import {
 import AuthAPI from 'api/auth';
 import { setToken } from 'api/index';
 import { RootState } from '../types';
+import AuthSelectors from './auth.selectors';
 
 export default class AuthActions {
   public static login = createAsyncThunk(
@@ -41,7 +42,7 @@ export default class AuthActions {
     REFRESH_TOKEN,
     async (_, thunkAPI) => {
       const state = thunkAPI.getState() as RootState;
-      const { refreshToken } = state.auth;
+      const refreshToken = AuthSelectors.getRefreshToken(state);
       if (!refreshToken) {
         return thunkAPI.rejectWithValue(`Refresh token doesn't exist`);
       }

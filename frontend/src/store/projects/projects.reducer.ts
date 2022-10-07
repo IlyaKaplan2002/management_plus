@@ -1,10 +1,12 @@
 import { createReducer } from '@reduxjs/toolkit';
+import { authActions } from 'store/auth';
 import { Action } from 'store/types';
 import projectsActions from './projects.actions';
-import { ProjectsState } from './projects.type';
+import { ProjectsState } from './projects.types';
 
 const initialState: ProjectsState = {
   items: {},
+  fetched: false,
   loading: false,
   error: null,
 };
@@ -20,6 +22,7 @@ const reducer = createReducer(initialState, {
   ) => ({
     ...state,
     items: { ...action.payload },
+    fetched: true,
     loading: false,
   }),
   [projectsActions.get.rejected.type]: (
@@ -28,6 +31,7 @@ const reducer = createReducer(initialState, {
   ) => ({
     ...state,
     error: action.payload,
+    fetched: true,
     loading: false,
   }),
 
@@ -51,6 +55,9 @@ const reducer = createReducer(initialState, {
     error: action.payload,
     loading: false,
   }),
+
+  [authActions.logout.rejected.type]: () => initialState,
+  [authActions.logout.fulfilled.type]: () => initialState,
 });
 
 export default reducer;

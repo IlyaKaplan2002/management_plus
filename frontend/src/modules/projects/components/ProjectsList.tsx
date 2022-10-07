@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Project } from 'store/projects/projects.type';
+import { Project } from 'store/projects/projects.types';
 import ProjectsItem from './ProjectsItem';
 
 interface ProjectsListProps {

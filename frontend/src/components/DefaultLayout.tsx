@@ -118,7 +118,8 @@ const DefaultLayout = ({ children }) => {
 };
 
 DefaultLayout.MainWrapper = styled.div`
-  padding: 92px 50px;
+  padding: 92px 50px 50px;
+  min-height: 100vh;
 `;
 
 DefaultLayout.Logo = styled(Typography)`

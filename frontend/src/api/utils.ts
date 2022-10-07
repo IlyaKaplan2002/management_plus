@@ -5,7 +5,7 @@ import { APIResponse } from './types';
 
 export const requestWrapper =
   (req: (data?: any) => Promise<APIResponse | AxiosError<APIResponse>>) =>
-  async (data?: any) => {
+  async (data?: any): Promise<APIResponse> => {
     try {
       const response = await req(data);
       return response as APIResponse;
