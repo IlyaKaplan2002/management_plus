@@ -18,6 +18,7 @@ const initialState: AuthState = {
   refreshToken: null,
   error: null,
   loading: false,
+  refreshing: false,
 };
 
 const reducer = createReducer(initialState, {
@@ -87,6 +88,7 @@ const reducer = createReducer(initialState, {
   [authActions.refreshToken.pending.type]: (state: AuthState) => ({
     ...state,
     loading: true,
+    refreshing: true,
   }),
   [authActions.refreshToken.rejected.type]: () => {
     removeToken();
@@ -103,6 +105,7 @@ const reducer = createReducer(initialState, {
       token: action.payload.token,
       refreshToken: action.payload.refreshToken,
       loading: false,
+      refreshing: false,
       error: null,
     };
   },

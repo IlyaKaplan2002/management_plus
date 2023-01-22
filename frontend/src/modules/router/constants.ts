@@ -1,6 +1,6 @@
 import Login from 'modules/auth/pages/Login';
 import Register from 'modules/auth/pages/Register';
-import Dashboard from 'modules/dashboard/pages/Dashboard';
+import Project from 'modules/projects/pages/Project';
 import ProjectDashboard from 'modules/projects/pages/ProjectDashboard';
 import Projects from 'modules/projects/pages/Projects';
 import NotFound from './pages/NotFound';
@@ -16,8 +16,8 @@ export const routes: { [key: string]: RouteItem } = {
     redirect: '/login',
   },
   projectDashboard: {
-    name: 'Project Dashboard',
-    element: ProjectDashboard,
+    name: 'Project',
+    element: Project,
     path: '/projects/:id',
     isProtected: true,
     isRestricted: false,
@@ -25,8 +25,8 @@ export const routes: { [key: string]: RouteItem } = {
   },
   dashboard: {
     name: 'Dashboard',
-    element: Dashboard,
-    path: '/dashboard',
+    element: ProjectDashboard,
+    path: '/projects/:id/dashboard',
     isProtected: true,
     isRestricted: false,
     redirect: '/login',

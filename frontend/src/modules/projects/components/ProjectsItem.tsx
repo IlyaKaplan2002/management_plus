@@ -19,7 +19,7 @@ const ProjectsItem = ({ project, add }: ProjectItemProps) => {
       onClick={
         Boolean(add) && add
           ? () => add(true)
-          : () => navigate(`/projects/${project?.id}`)
+          : () => navigate(`/projects/${project?.id}/dashboard`)
       }
     >
       {Boolean(add) ? (

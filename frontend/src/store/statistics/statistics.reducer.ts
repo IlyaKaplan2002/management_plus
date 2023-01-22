@@ -3,6 +3,7 @@ import { authActions } from 'store/auth';
 import { StatisticsState, StatisticsStore } from './statistics.types';
 import StatisticsActions from './statistics.actions';
 import { Action } from '../types';
+import { dateToMonth } from './statistics.helpers';
 
 const initialState: StatisticsState = {
   items: {},
@@ -54,7 +55,10 @@ const reducer = createReducer(initialState, {
         ...state.items,
         [projectId]: {
           ...state.items[projectId],
-          [statistics.id]: { ...statistics },
+          [dateToMonth(statistics.date)]: {
+            ...state.items[projectId][dateToMonth(statistics.date)],
+            [statistics.id]: { ...statistics },
+          },
         },
       },
       loading: false,

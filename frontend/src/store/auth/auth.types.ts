@@ -18,6 +18,7 @@ export interface AuthState {
   refreshToken: string | null;
   error: null | string;
   loading: boolean;
+  refreshing: boolean;
 }
 
 export interface LoginProps {

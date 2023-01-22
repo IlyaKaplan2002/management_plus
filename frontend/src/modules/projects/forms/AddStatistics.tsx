@@ -8,6 +8,7 @@ import {
   FormHelperText,
   Input,
   InputLabel,
+  Typography,
 } from '@mui/material';
 import dayjs from 'dayjs';
 import {
@@ -62,6 +63,10 @@ const AddStatistics = ({ handleSubmit, statistics }: AddStatisticsProps) => {
 
   return (
     <AddStatistics.Container onSubmit={formik.handleSubmit}>
+      <Typography className="title" variant="h6">
+        Add statistics
+      </Typography>
+
       <FormControl className="formItem">
         <InputLabel>Date</InputLabel>
         <Input
@@ -135,6 +140,10 @@ AddStatistics.Container = styled.form`
   width: 100%;
   display: flex;
   flex-direction: column;
+
+  .title {
+    margin-bottom: 20px;
+  }
 
   .formItem {
     margin-bottom: 30px;

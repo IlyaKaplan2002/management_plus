@@ -1,7 +1,11 @@
 import { Request } from '@types';
 import { Response, NextFunction } from 'express';
 
-type Controller = (req: Request, res: Response, next: NextFunction) => void;
+type Controller = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => Promise<void>;
 
 const ctrlWrapper = (ctrl: Controller) => {
   return async (req: Request, res: Response, next: NextFunction) => {

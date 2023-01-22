@@ -1,8 +1,6 @@
-import React from 'react';
 import {
   Bar,
   BarChart,
-  Brush,
   CartesianGrid,
   Legend,
   ResponsiveContainer,
@@ -10,28 +8,33 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { FullChartData } from 'store/statistics/statistics.types';
 
-const ProfitableChart = () => {
-  const data: {
-    label: string;
-    Profitability: number;
-    fill: string;
-  }[] = [];
+interface ProfitableChartProps {
+  data: FullChartData;
+}
 
-  const dataBrush: { name: string; value: number }[] = [];
+const ProfitableChart = ({ data: { chartData } }: ProfitableChartProps) => {
+  // const data: {
+  //   label: string;
+  //   Profitability: number;
+  //   fill: string;
+  // }[] = [];
 
-  for (let i = 0; i <= 100; i++) {
-    data.push({
-      label: `${i}-2022`,
-      Profitability: 3000,
-      fill: i % 2 === 0 ? 'green' : 'red',
-    });
-    dataBrush.push({ name: `${i}-2022`, value: i });
-  }
+  // const dataBrush: { name: string; value: number }[] = [];
+
+  // for (let i = 0; i <= 100; i++) {
+  //   data.push({
+  //     label: `${i}-2022`,
+  //     Profitability: 3000,
+  //     fill: i % 2 === 0 ? 'green' : 'red',
+  //   });
+  //   dataBrush.push({ name: `${i}-2022`, value: i });
+  // }
 
   return (
     <ResponsiveContainer width="100%" height="50%">
-      <BarChart data={data} barGap={0} barCategoryGap={0} barSize={20}>
+      <BarChart data={chartData} barGap={0} barCategoryGap={0} barSize={20}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
           dataKey="label"
@@ -41,15 +44,7 @@ const ProfitableChart = () => {
         <YAxis padding={{ top: 40 }} />
         <Tooltip />
         <Legend />
-        <Brush
-          dataKey="name"
-          height={30}
-          stroke="#8884d8"
-          startIndex={20}
-          endIndex={40}
-          tickFormatter={(value, index) => `${index}-2022-${value}`}
-        />
-        <Bar dataKey="Profitability" fill="fill" />
+        <Bar dataKey="Profitability" fill="green" />
       </BarChart>
     </ResponsiveContainer>
   );

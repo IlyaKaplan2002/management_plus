@@ -24,6 +24,9 @@ const ProjectDashboard = () => {
   const statistics = useSelector(
     statisticsSelectors.getProjectStatistics(projectId || ''),
   );
+  const profitableChartData = useSelector(
+    statisticsSelectors.getProfitableChartData(projectId || ''),
+  );
   const statisticsError = useSelector(statisticsSelectors.getError);
   const projects = useSelector(projectsSelectors.getAll);
   const project = useSelector(projectsSelectors.getById(projectId || ''));
@@ -68,8 +71,8 @@ const ProjectDashboard = () => {
             {project?.name || ''}
           </ProjectDashboard.Title>
           <ProjectDashboard.ChartsWrapper>
-            <ProfitableChart />
-            <StatisticsChart />
+            <ProfitableChart data={profitableChartData} />
+            <StatisticsChart data={profitableChartData} />
           </ProjectDashboard.ChartsWrapper>
         </ProjectDashboard.LeftWrapper>
 

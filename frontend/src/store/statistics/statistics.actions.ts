@@ -1,11 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import {
-  CREATE,
-  GET,
-  StatisticsCreate,
-  StatisticsStore,
-} from './statistics.types';
+import { CREATE, GET, StatisticsCreate } from './statistics.types';
 import StatisticsAPI from 'api/statistics';
+import { getStatisticsSortedByMonths } from './statistics.helpers';
 
 export default class StatisticsActions {
   public static get = createAsyncThunk(
@@ -17,13 +13,7 @@ export default class StatisticsActions {
         return thunkAPI.rejectWithValue(response.message);
       }
 
-      const statistics = response.data.statistics.reduce(
-        (acc: { [key: string]: StatisticsStore }, item: StatisticsStore) => ({
-          ...acc,
-          [item.id]: { ...item },
-        }),
-        {},
-      );
+      const statistics = getStatisticsSortedByMonths(response.data.statistics);
 
       return thunkAPI.fulfillWithValue({ projectId, statistics });
     },
