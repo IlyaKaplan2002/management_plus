@@ -2,7 +2,7 @@ import { Project } from './project.entity';
 
 export default class ProjectService {
   public static create = async (data: Project) => {
-    const project = Project.save({ ...data, lastUpdate: new Date() });
+    const project = await Project.save({ ...data, lastUpdate: new Date() });
     return project;
   };
 

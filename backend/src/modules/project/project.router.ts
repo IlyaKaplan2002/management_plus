@@ -5,6 +5,8 @@ import { Router } from 'express';
 import ProjectController from './project.controller';
 import ProjectSchema from './project.schema';
 import statisticsRouter from '../statistics';
+import productRouter from '../product';
+import periodRouter from '../period';
 
 const router = Router();
 
@@ -27,5 +29,9 @@ router.put(
 router.delete('/:id', auth(), ctrlWrapper(ProjectController.delete));
 
 router.use('/:project/statistics', statisticsRouter);
+
+router.use('/:project/products', productRouter);
+
+router.use('/:project/periods', periodRouter);
 
 export default router;

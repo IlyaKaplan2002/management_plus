@@ -2,7 +2,7 @@ import { Statistics } from './statistics.entity';
 
 export default class StatisticsService {
   public static create = async (data: Statistics) => {
-    const statistics = Statistics.save({ ...data });
+    const statistics = await Statistics.save({ ...data });
     return statistics;
   };
 

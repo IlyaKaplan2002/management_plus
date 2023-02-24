@@ -2,7 +2,7 @@ import { User } from './user.entity';
 
 export default class UserService {
   public static create = async (data: User) => {
-    const user = User.save(data);
+    const user = await User.save(data);
     return user;
   };
 
