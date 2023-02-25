@@ -1,7 +1,14 @@
+import {
+  Analytics,
+  Dashboard,
+  ProductionQuantityLimits,
+  Settings,
+  Timelapse,
+} from '@mui/icons-material';
 import Login from 'modules/auth/pages/Login';
 import Register from 'modules/auth/pages/Register';
 import Project from 'modules/projects/pages/Project';
-import ProjectDashboard from 'modules/projects/pages/ProjectDashboard';
+import ProjectDashboard from 'modules/dashboard/pages/ProjectDashboard';
 import Projects from 'modules/projects/pages/Projects';
 import NotFound from './pages/NotFound';
 import { RouteItem } from './types';
@@ -30,6 +37,43 @@ export const routes: { [key: string]: RouteItem } = {
     isProtected: true,
     isRestricted: false,
     redirect: '/login',
+    icon: Dashboard,
+  },
+  projectStatistics: {
+    name: 'Statistics',
+    element: ProjectDashboard,
+    path: '/projects/:id/statistics',
+    isProtected: true,
+    isRestricted: false,
+    redirect: '/login',
+    icon: Analytics,
+  },
+  projectProducts: {
+    name: 'Products',
+    element: ProjectDashboard,
+    path: '/projects/:id/products',
+    isProtected: true,
+    isRestricted: false,
+    redirect: '/login',
+    icon: ProductionQuantityLimits,
+  },
+  projectPeriods: {
+    name: 'Periods',
+    element: ProjectDashboard,
+    path: '/projects/:id/periods',
+    isProtected: true,
+    isRestricted: false,
+    redirect: '/login',
+    icon: Timelapse,
+  },
+  projectSettings: {
+    name: 'Settings',
+    element: ProjectDashboard,
+    path: '/projects/:id/settings',
+    isProtected: true,
+    isRestricted: false,
+    redirect: '/login',
+    icon: Settings,
   },
   login: {
     name: 'Login',

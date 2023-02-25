@@ -21,4 +21,5 @@ export interface ProjectsState {
   loading: boolean;
   fetched: boolean;
   error: string | null;
+  currentlyCreating: string | null;
 }

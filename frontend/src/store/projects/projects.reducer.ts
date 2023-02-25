@@ -9,6 +9,7 @@ const initialState: ProjectsState = {
   fetched: false,
   loading: false,
   error: null,
+  currentlyCreating: null,
 };
 
 const reducer = createReducer(initialState, {
@@ -44,8 +45,9 @@ const reducer = createReducer(initialState, {
     action: Action,
   ) => ({
     ...state,
-    items: { [action.payload.id]: action.payload, ...state.items },
+    items: { ...state.items, [action.payload.id]: action.payload },
     loading: false,
+    currentlyCreating: action.payload.id,
   }),
   [projectsActions.create.rejected.type]: (
     state: ProjectsState,

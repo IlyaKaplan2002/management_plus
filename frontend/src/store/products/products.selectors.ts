@@ -9,6 +9,4 @@ export default class ProjectsSelectors {
   public static getLoading = (state: RootState) => state[STATE_KEY].loading;
   public static getFetched = (state: RootState) => state[STATE_KEY].fetched;
   public static getError = (state: RootState) => state[STATE_KEY].error;
-  public static getCurrentlyCreating = (state: RootState) =>
-    state[STATE_KEY].currentlyCreating;
 }

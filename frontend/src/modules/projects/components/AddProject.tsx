@@ -1,39 +1,57 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { IconButton, Slide, Typography } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import FirstStep from '../forms/steps/FirstStep';
 import { useAppDispatch } from 'store/index';
-import ProjectsActions from 'store/projects/projects.actions';
+import { projectsActions, projectsSelectors } from 'store/projects';
 import { ProjectCreate } from 'store/projects/projects.types';
 import ErrorAlert from 'components/ErrorAlert';
 import { useSelector } from 'react-redux';
-import ProjectsSelectors from 'store/projects/projects.selectors';
+import SecondStep from '../forms/steps/SecondStep';
+import { ProductCreate } from 'store/products/products.types';
+import { productsActions, productsSelectors } from 'store/products';
 
 interface AddProjectProps {
   open: boolean;
   setOpen: (value: boolean) => void;
+  step: number;
+  setStep: (value: number) => void;
 }
 
-const AddProject = ({ open, setOpen }: AddProjectProps) => {
-  const [step, setStep] = useState<number>(1);
-  const [data, setData] = useState<ProjectCreate>({
-    name: '',
-    description: '',
-  });
+const AddProject = ({ open, setOpen, step, setStep }: AddProjectProps) => {
   const [alertOpen, setAlertOpen] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
-  const createError = useSelector(ProjectsSelectors.getError);
+  const createProjectError = useSelector(projectsSelectors.getError);
+  const currentlyCreatingProject = useSelector(
+    projectsSelectors.getCurrentlyCreating,
+  );
 
-  const onCreate = useCallback(
+  const createProductsError = useSelector(productsSelectors.getError);
+
+  const onProjectCreate = useCallback(
     async (createData: ProjectCreate) => {
-      await dispatch(ProjectsActions.create(createData));
+      await dispatch(projectsActions.create(createData));
       setAlertOpen(true);
-      setOpen(false);
-      setStep(1);
+      setStep(2);
     },
-    [dispatch],
+    [dispatch, setStep],
+  );
+
+  const onProductsCreate = useCallback(
+    async (createData: ProductCreate[]) => {
+      if (!currentlyCreatingProject) return;
+
+      await dispatch(
+        productsActions.createMany({
+          projectId: currentlyCreatingProject,
+          products: createData,
+        }),
+      );
+      setOpen(false);
+    },
+    [currentlyCreatingProject, dispatch, setOpen],
   );
 
   return (
@@ -56,18 +74,16 @@ const AddProject = ({ open, setOpen }: AddProjectProps) => {
           </AddProject.TopWrapper>
 
           <AddProject.BottomWrapper>
-            {step === 1 && (
-              <FirstStep
-                setStep={setStep}
-                data={data}
-                setData={setData}
-                onCreate={onCreate}
-              />
-            )}
+            {step === 1 && <FirstStep onCreate={onProjectCreate} />}
+            {step === 2 && <SecondStep onCreate={onProductsCreate} />}
           </AddProject.BottomWrapper>
         </AddProject.Wrapper>
       </AddProject.Container>
-      <ErrorAlert open={alertOpen} error={createError} setOpen={setAlertOpen} />
+      <ErrorAlert
+        open={alertOpen}
+        error={createProjectError || createProductsError}
+        setOpen={setAlertOpen}
+      />
     </>
   );
 };

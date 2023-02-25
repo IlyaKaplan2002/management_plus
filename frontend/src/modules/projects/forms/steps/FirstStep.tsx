@@ -3,13 +3,8 @@ import { useFormik } from 'formik';
 import styled from 'styled-components';
 import { firstStepSchema } from '../../schemas/firstStep';
 import { ProjectCreate } from 'store/projects/projects.types';
-import {
-  Button,
-  FormControl,
-  FormHelperText,
-  Input,
-  InputLabel,
-} from '@mui/material';
+import { Button } from '@mui/material';
+import InputField from 'components/InputField';
 
 const initialValues = {
   name: '',
@@ -17,17 +12,12 @@ const initialValues = {
 };
 
 interface FirstStepProps {
-  setStep: (value: number) => void;
-  data: ProjectCreate;
-  setData: (value: any) => void;
   onCreate: (value: ProjectCreate) => void;
 }
 
-const FirstStep = ({ setStep, data, setData, onCreate }: FirstStepProps) => {
+const FirstStep = ({ onCreate }: FirstStepProps) => {
   const onSubmit = useCallback(
     (result: { name: string; description: string }) => {
-      //   setData(prev => ({ ...prev, ...result }));
-      //   setStep(2);
       onCreate(result);
     },
     [onCreate],
@@ -37,48 +27,34 @@ const FirstStep = ({ setStep, data, setData, onCreate }: FirstStepProps) => {
     validateOnBlur: true,
     validateOnChange: true,
     validationSchema: firstStepSchema,
-    initialValues: data,
+    initialValues,
     initialErrors: initialValues,
     onSubmit,
   });
 
   return (
     <FirstStep.Container onSubmit={formik.handleSubmit}>
-      <FormControl className="formItem">
-        <InputLabel>Project name</InputLabel>
-        <Input
-          type="text"
-          name="name"
-          value={formik.values.name}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={Boolean(formik.errors.name) && formik.touched.name}
-        />
-        {Boolean(formik.errors.name) && formik.touched.name && (
-          <FormHelperText className="error">
-            {formik.errors.name}
-          </FormHelperText>
-        )}
-      </FormControl>
+      <InputField
+        label="Project name"
+        name="name"
+        type="text"
+        value={formik.values.name}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        errorText={formik.errors.name}
+        touched={Boolean(formik.touched.name)}
+      />
 
-      <FormControl className="formItem">
-        <InputLabel>Project description</InputLabel>
-        <Input
-          type="text"
-          name="description"
-          value={formik.values.description}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={
-            Boolean(formik.errors.description) && formik.touched.description
-          }
-        />
-        {Boolean(formik.errors.description) && formik.touched.description && (
-          <FormHelperText className="error">
-            {formik.errors.description}
-          </FormHelperText>
-        )}
-      </FormControl>
+      <InputField
+        label="Project description"
+        name="description"
+        type="text"
+        value={formik.values.description}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        errorText={formik.errors.description}
+        touched={Boolean(formik.touched.description)}
+      />
 
       <Button
         type="submit"
@@ -90,7 +66,7 @@ const FirstStep = ({ setStep, data, setData, onCreate }: FirstStepProps) => {
           !Boolean(formik.values.description)
         }
       >
-        Create
+        Next
       </Button>
     </FirstStep.Container>
   );
@@ -101,21 +77,9 @@ FirstStep.Container = styled.form`
   display: flex;
   flex-direction: column;
 
-  .formItem {
-    margin-bottom: 30px;
-    width: 400px;
-  }
-
   .button {
     margin-left: auto;
     height: 37px;
-  }
-
-  .error {
-    color: red;
-    position: absolute;
-    bottom: 0;
-    transform: translateY(100%);
   }
 `;
 
