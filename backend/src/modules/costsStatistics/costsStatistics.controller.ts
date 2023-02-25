@@ -2,16 +2,16 @@ import createResponse from '@helpers/createRes';
 import throwError from '@helpers/throwError';
 import ProjectService from '@modules/project/project.service';
 import PeriodService from '@modules/period/period.service';
-import ProductService from '@modules/product/product.service';
+import CostsCategoryService from '@modules/costsCategory/costsCategory.service';
 import { Request } from '@types';
 import { Response } from 'express';
-import PlannedSellQuantityService from './plannedSellQuantity.service';
+import CostsStatisticsService from './costsStatistics.service';
 
-export default class PlannedSellQuantityController {
+export default class CostsStatisticsController {
   public static get = async (req: Request, res: Response) => {
     const { id: userId } = req.user;
     const { project: projectId, period: periodId } = req.params;
-    const { product: productId } = req.query;
+    const { category: categoryId } = req.query;
 
     const project = await ProjectService.findById(projectId);
     if (!project || project.userId !== userId)
@@ -21,26 +21,27 @@ export default class PlannedSellQuantityController {
     if (!period || period.projectId !== projectId)
       throwError('Period not found', 404);
 
-    if (productId && typeof productId === 'string') {
-      const product = await ProductService.findById(productId);
+    if (categoryId && typeof categoryId === 'string') {
+      const category = await CostsCategoryService.findById(categoryId);
 
-      if (!product || product.projectId !== projectId)
-        throwError('Product not found', 404);
+      if (!category || category.projectId !== projectId)
+        throwError('Category not found', 404);
 
-      const plannedSellQuantities =
-        await PlannedSellQuantityService.findByPeriodIdAndProductId(
+      const costsStatistics =
+        await CostsStatisticsService.findByPeriodIdAndCostsCategoryId(
           periodId,
-          productId,
+          categoryId,
         );
 
-      createResponse({ res, data: { plannedSellQuantities } });
+      createResponse({ res, data: { costsStatistics } });
       return;
     }
 
-    const plannedSellQuantities =
-      await PlannedSellQuantityService.findByPeriodId(periodId);
+    const costsStatistics = await CostsStatisticsService.findByPeriodId(
+      periodId,
+    );
 
-    createResponse({ res, data: { plannedSellQuantities } });
+    createResponse({ res, data: { costsStatistics } });
   };
 
   public static create = async (req: Request, res: Response) => {
@@ -55,16 +56,22 @@ export default class PlannedSellQuantityController {
     if (!period || period.projectId !== projectId)
       throwError('Period not found', 404);
 
-    const product = await ProductService.findById(req.body.productId);
-    if (!product || product.projectId !== projectId)
-      throwError('Product not found', 404);
+    const category = await CostsCategoryService.findById(
+      req.body.costsCategoryId,
+    );
+    if (!category || category.projectId !== projectId)
+      throwError('Category not found', 404);
 
-    const plannedSellQuantity = await PlannedSellQuantityService.create({
+    const costsStatistics = await CostsStatisticsService.create({
       ...req.body,
       periodId,
     });
 
-    createResponse({ res, data: { plannedSellQuantity }, code: 201 });
+    createResponse({
+      res,
+      data: { costsStatistics },
+      code: 201,
+    });
   };
 
   public static createMany = async (req: Request, res: Response) => {
@@ -79,20 +86,26 @@ export default class PlannedSellQuantityController {
     if (!period || period.projectId !== projectId)
       throwError('Period not found', 404);
 
-    const plannedSellQuantitiesToInsert = [];
+    const costsStatisticsToInsert = [];
 
     for (const item of req.body) {
-      const product = await ProductService.findById(item.productId);
-      if (!product || product.projectId !== projectId)
-        throwError('Product not found', 404);
-      plannedSellQuantitiesToInsert.push({ ...item, periodId });
+      const category = await CostsCategoryService.findById(
+        item.costsCategoryId,
+      );
+      if (!category || category.projectId !== projectId)
+        throwError('Category not found', 404);
+      costsStatisticsToInsert.push({ ...item, periodId });
     }
 
-    const plannedSellQuantities = await PlannedSellQuantityService.createMany(
-      plannedSellQuantitiesToInsert,
+    const costsStatistics = await CostsStatisticsService.createMany(
+      costsStatisticsToInsert,
     );
 
-    createResponse({ res, data: { plannedSellQuantities }, code: 201 });
+    createResponse({
+      res,
+      data: { costsStatistics },
+      code: 201,
+    });
   };
 
   public static update = async (req: Request, res: Response) => {
@@ -107,19 +120,19 @@ export default class PlannedSellQuantityController {
     if (!period || period.projectId !== projectId)
       throwError('Period not found', 404);
 
-    if (req.body.productId) {
-      const product = await ProductService.findById(req.body.productId);
-      if (!product || product.projectId !== projectId)
-        throwError('Product not found', 404);
+    if (req.body.costsCategoryId) {
+      const category = await CostsCategoryService.findById(
+        req.body.costsCategoryId,
+      );
+      if (!category || category.projectId !== projectId)
+        throwError('Category not found', 404);
     }
 
-    const oldPlannedSellQuantity = await PlannedSellQuantityService.findById(
-      id,
-    );
-    if (!oldPlannedSellQuantity || oldPlannedSellQuantity.periodId !== periodId)
+    const oldCostsStatistics = await CostsStatisticsService.findById(id);
+    if (!oldCostsStatistics || oldCostsStatistics.periodId !== periodId)
       throwError('Item not found', 404);
 
-    const plannedSellQuantity = await PlannedSellQuantityService.update(
+    const costsStatistics = await CostsStatisticsService.update(
       { ...req.body },
       id,
     );
@@ -127,11 +140,12 @@ export default class PlannedSellQuantityController {
     createResponse({
       res,
       data: {
-        plannedSellQuantity: {
-          id: plannedSellQuantity.id,
-          quantity: plannedSellQuantity.quantity,
-          productId: plannedSellQuantity.productId,
-          periodId: plannedSellQuantity.periodId,
+        costsStatistics: {
+          id: costsStatistics.id,
+          creationDate: costsStatistics.creationDate,
+          costs: costsStatistics.costs,
+          costsCategoryId: costsStatistics.costsCategoryId,
+          periodId: costsStatistics.periodId,
         },
       },
     });
@@ -149,13 +163,11 @@ export default class PlannedSellQuantityController {
     if (!period || period.projectId !== projectId)
       throwError('Period not found', 404);
 
-    const oldPlannedSellQuantity = await PlannedSellQuantityService.findById(
-      id,
-    );
-    if (!oldPlannedSellQuantity || oldPlannedSellQuantity.periodId !== periodId)
+    const oldCostsStatistics = await CostsStatisticsService.findById(id);
+    if (!oldCostsStatistics || oldCostsStatistics.periodId !== periodId)
       throwError('Item not found', 404);
 
-    const result = await PlannedSellQuantityService.delete(id);
+    const result = await CostsStatisticsService.delete(id);
     if (!result) throwError('Failed', 500);
 
     createResponse({ res, code: 204, data: null });

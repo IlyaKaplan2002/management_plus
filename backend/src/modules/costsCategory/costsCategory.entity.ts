@@ -1,15 +1,12 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('period')
-export class Period extends BaseEntity {
+@Entity('costs_category')
+export class CostsCategory extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   public id: string;
 
-  @Column({ name: 'start_date', type: 'timestamptz' })
-  public startDate: Date;
-
-  @Column({ name: 'end_date', type: 'timestamptz' })
-  public endDate: Date;
+  @Column({ name: 'name' })
+  public name: string;
 
   @Column({ name: 'project_id' })
   public projectId: string;
@@ -17,8 +14,7 @@ export class Period extends BaseEntity {
   public toJSON = () =>
     JSON.stringify({
       id: this.id,
-      start_date: this.startDate,
-      end_date: this.endDate,
+      name: this.name,
       project_id: this.projectId,
     });
 }

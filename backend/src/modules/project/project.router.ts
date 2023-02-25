@@ -7,6 +7,7 @@ import ProjectSchema from './project.schema';
 import statisticsRouter from '../statistics';
 import productRouter from '../product';
 import periodRouter from '../period';
+import costsCategoryRouter from '../costsCategory';
 
 const router = Router();
 
@@ -33,5 +34,7 @@ router.use('/:project/statistics', statisticsRouter);
 router.use('/:project/products', productRouter);
 
 router.use('/:project/periods', periodRouter);
+
+router.use('/:project/costs-category', costsCategoryRouter);
 
 export default router;

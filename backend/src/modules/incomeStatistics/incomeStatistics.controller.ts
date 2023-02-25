@@ -5,9 +5,9 @@ import PeriodService from '@modules/period/period.service';
 import ProductService from '@modules/product/product.service';
 import { Request } from '@types';
 import { Response } from 'express';
-import PlannedSellQuantityService from './plannedSellQuantity.service';
+import IncomeStatisticsService from './incomeStatistics.service';
 
-export default class PlannedSellQuantityController {
+export default class IncomeStatisticsController {
   public static get = async (req: Request, res: Response) => {
     const { id: userId } = req.user;
     const { project: projectId, period: periodId } = req.params;
@@ -27,20 +27,21 @@ export default class PlannedSellQuantityController {
       if (!product || product.projectId !== projectId)
         throwError('Product not found', 404);
 
-      const plannedSellQuantities =
-        await PlannedSellQuantityService.findByPeriodIdAndProductId(
+      const incomeStatistics =
+        await IncomeStatisticsService.findByPeriodIdAndProductId(
           periodId,
           productId,
         );
 
-      createResponse({ res, data: { plannedSellQuantities } });
+      createResponse({ res, data: { incomeStatistics } });
       return;
     }
 
-    const plannedSellQuantities =
-      await PlannedSellQuantityService.findByPeriodId(periodId);
+    const incomeStatistics = await IncomeStatisticsService.findByPeriodId(
+      periodId,
+    );
 
-    createResponse({ res, data: { plannedSellQuantities } });
+    createResponse({ res, data: { incomeStatistics } });
   };
 
   public static create = async (req: Request, res: Response) => {
@@ -59,12 +60,16 @@ export default class PlannedSellQuantityController {
     if (!product || product.projectId !== projectId)
       throwError('Product not found', 404);
 
-    const plannedSellQuantity = await PlannedSellQuantityService.create({
+    const incomeStatistics = await IncomeStatisticsService.create({
       ...req.body,
       periodId,
     });
 
-    createResponse({ res, data: { plannedSellQuantity }, code: 201 });
+    createResponse({
+      res,
+      data: { incomeStatistics },
+      code: 201,
+    });
   };
 
   public static createMany = async (req: Request, res: Response) => {
@@ -79,20 +84,24 @@ export default class PlannedSellQuantityController {
     if (!period || period.projectId !== projectId)
       throwError('Period not found', 404);
 
-    const plannedSellQuantitiesToInsert = [];
+    const incomeStatisticsToInsert = [];
 
     for (const item of req.body) {
       const product = await ProductService.findById(item.productId);
       if (!product || product.projectId !== projectId)
         throwError('Product not found', 404);
-      plannedSellQuantitiesToInsert.push({ ...item, periodId });
+      incomeStatisticsToInsert.push({ ...item, periodId });
     }
 
-    const plannedSellQuantities = await PlannedSellQuantityService.createMany(
-      plannedSellQuantitiesToInsert,
+    const incomeStatistics = await IncomeStatisticsService.createMany(
+      incomeStatisticsToInsert,
     );
 
-    createResponse({ res, data: { plannedSellQuantities }, code: 201 });
+    createResponse({
+      res,
+      data: { incomeStatistics },
+      code: 201,
+    });
   };
 
   public static update = async (req: Request, res: Response) => {
@@ -113,13 +122,11 @@ export default class PlannedSellQuantityController {
         throwError('Product not found', 404);
     }
 
-    const oldPlannedSellQuantity = await PlannedSellQuantityService.findById(
-      id,
-    );
-    if (!oldPlannedSellQuantity || oldPlannedSellQuantity.periodId !== periodId)
+    const oldIncomeStatistics = await IncomeStatisticsService.findById(id);
+    if (!oldIncomeStatistics || oldIncomeStatistics.periodId !== periodId)
       throwError('Item not found', 404);
 
-    const plannedSellQuantity = await PlannedSellQuantityService.update(
+    const incomeStatistics = await IncomeStatisticsService.update(
       { ...req.body },
       id,
     );
@@ -127,11 +134,13 @@ export default class PlannedSellQuantityController {
     createResponse({
       res,
       data: {
-        plannedSellQuantity: {
-          id: plannedSellQuantity.id,
-          quantity: plannedSellQuantity.quantity,
-          productId: plannedSellQuantity.productId,
-          periodId: plannedSellQuantity.periodId,
+        incomeStatistics: {
+          id: incomeStatistics.id,
+          creationDate: incomeStatistics.creationDate,
+          quantity: incomeStatistics.quantity,
+          price: incomeStatistics.price,
+          productId: incomeStatistics.productId,
+          periodId: incomeStatistics.periodId,
         },
       },
     });
@@ -149,13 +158,11 @@ export default class PlannedSellQuantityController {
     if (!period || period.projectId !== projectId)
       throwError('Period not found', 404);
 
-    const oldPlannedSellQuantity = await PlannedSellQuantityService.findById(
-      id,
-    );
-    if (!oldPlannedSellQuantity || oldPlannedSellQuantity.periodId !== periodId)
+    const oldIncomeStatistics = await IncomeStatisticsService.findById(id);
+    if (!oldIncomeStatistics || oldIncomeStatistics.periodId !== periodId)
       throwError('Item not found', 404);
 
-    const result = await PlannedSellQuantityService.delete(id);
+    const result = await IncomeStatisticsService.delete(id);
     if (!result) throwError('Failed', 500);
 
     createResponse({ res, code: 204, data: null });

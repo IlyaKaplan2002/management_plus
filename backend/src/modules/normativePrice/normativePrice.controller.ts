@@ -5,9 +5,9 @@ import PeriodService from '@modules/period/period.service';
 import ProductService from '@modules/product/product.service';
 import { Request } from '@types';
 import { Response } from 'express';
-import PlannedSellQuantityService from './plannedSellQuantity.service';
+import NormativePriceService from './normativePrice.service';
 
-export default class PlannedSellQuantityController {
+export default class NormativePriceController {
   public static get = async (req: Request, res: Response) => {
     const { id: userId } = req.user;
     const { project: projectId, period: periodId } = req.params;
@@ -27,20 +27,21 @@ export default class PlannedSellQuantityController {
       if (!product || product.projectId !== projectId)
         throwError('Product not found', 404);
 
-      const plannedSellQuantities =
-        await PlannedSellQuantityService.findByPeriodIdAndProductId(
+      const normativePrices =
+        await NormativePriceService.findByPeriodIdAndProductId(
           periodId,
           productId,
         );
 
-      createResponse({ res, data: { plannedSellQuantities } });
+      createResponse({ res, data: { normativePrices } });
       return;
     }
 
-    const plannedSellQuantities =
-      await PlannedSellQuantityService.findByPeriodId(periodId);
+    const normativePrices = await NormativePriceService.findByPeriodId(
+      periodId,
+    );
 
-    createResponse({ res, data: { plannedSellQuantities } });
+    createResponse({ res, data: { normativePrices } });
   };
 
   public static create = async (req: Request, res: Response) => {
@@ -59,12 +60,12 @@ export default class PlannedSellQuantityController {
     if (!product || product.projectId !== projectId)
       throwError('Product not found', 404);
 
-    const plannedSellQuantity = await PlannedSellQuantityService.create({
+    const normativePrice = await NormativePriceService.create({
       ...req.body,
       periodId,
     });
 
-    createResponse({ res, data: { plannedSellQuantity }, code: 201 });
+    createResponse({ res, data: { normativePrice }, code: 201 });
   };
 
   public static createMany = async (req: Request, res: Response) => {
@@ -79,20 +80,20 @@ export default class PlannedSellQuantityController {
     if (!period || period.projectId !== projectId)
       throwError('Period not found', 404);
 
-    const plannedSellQuantitiesToInsert = [];
+    const normativePricesToInsert = [];
 
     for (const item of req.body) {
       const product = await ProductService.findById(item.productId);
       if (!product || product.projectId !== projectId)
         throwError('Product not found', 404);
-      plannedSellQuantitiesToInsert.push({ ...item, periodId });
+      normativePricesToInsert.push({ ...item, periodId });
     }
 
-    const plannedSellQuantities = await PlannedSellQuantityService.createMany(
-      plannedSellQuantitiesToInsert,
+    const normativePrices = await NormativePriceService.createMany(
+      normativePricesToInsert,
     );
 
-    createResponse({ res, data: { plannedSellQuantities }, code: 201 });
+    createResponse({ res, data: { normativePrices }, code: 201 });
   };
 
   public static update = async (req: Request, res: Response) => {
@@ -113,13 +114,11 @@ export default class PlannedSellQuantityController {
         throwError('Product not found', 404);
     }
 
-    const oldPlannedSellQuantity = await PlannedSellQuantityService.findById(
-      id,
-    );
-    if (!oldPlannedSellQuantity || oldPlannedSellQuantity.periodId !== periodId)
+    const oldNormativePrice = await NormativePriceService.findById(id);
+    if (!oldNormativePrice || oldNormativePrice.periodId !== periodId)
       throwError('Item not found', 404);
 
-    const plannedSellQuantity = await PlannedSellQuantityService.update(
+    const normativePrice = await NormativePriceService.update(
       { ...req.body },
       id,
     );
@@ -127,11 +126,11 @@ export default class PlannedSellQuantityController {
     createResponse({
       res,
       data: {
-        plannedSellQuantity: {
-          id: plannedSellQuantity.id,
-          quantity: plannedSellQuantity.quantity,
-          productId: plannedSellQuantity.productId,
-          periodId: plannedSellQuantity.periodId,
+        normativePrice: {
+          id: normativePrice.id,
+          price: normativePrice.price,
+          productId: normativePrice.productId,
+          periodId: normativePrice.periodId,
         },
       },
     });
@@ -149,13 +148,11 @@ export default class PlannedSellQuantityController {
     if (!period || period.projectId !== projectId)
       throwError('Period not found', 404);
 
-    const oldPlannedSellQuantity = await PlannedSellQuantityService.findById(
-      id,
-    );
-    if (!oldPlannedSellQuantity || oldPlannedSellQuantity.periodId !== periodId)
+    const oldNormativePrice = await NormativePriceService.findById(id);
+    if (!oldNormativePrice || oldNormativePrice.periodId !== periodId)
       throwError('Item not found', 404);
 
-    const result = await PlannedSellQuantityService.delete(id);
+    const result = await NormativePriceService.delete(id);
     if (!result) throwError('Failed', 500);
 
     createResponse({ res, code: 204, data: null });
