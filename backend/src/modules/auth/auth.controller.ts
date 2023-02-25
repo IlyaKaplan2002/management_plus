@@ -31,6 +31,7 @@ export default class AuthController {
         token: result.token,
         refreshToken: result.refreshToken,
       },
+      code: 201,
     });
   };
 

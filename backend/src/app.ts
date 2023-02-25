@@ -1,8 +1,11 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import logger from 'morgan';
+// import swaggerUi from 'swagger-ui-express';
+
 import { Error } from '@types';
 import { authRouter, projectRouter, userRouter } from '@modules/index';
+// import swaggerDocument from './swagger.json';
 
 const app = express();
 
@@ -13,9 +16,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(logger(formatsLogger));
 
-app.use('/auth', authRouter);
-app.use('/projects', projectRouter);
-app.use('/user', userRouter);
+// app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+app.use('/api/auth', authRouter);
+app.use('/api/projects', projectRouter);
+app.use('/api/user', userRouter);
 
 app.use((req: Request, res: Response) => {
   res.status(404).json({ status: 'failed', code: 404, message: 'Not found' });
