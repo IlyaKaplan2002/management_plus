@@ -2,13 +2,12 @@ import { Typography } from '@mui/material';
 import ProjectLayout from 'components/ProjectLayout';
 import { FormikHelpers } from 'formik';
 import { ProductData } from 'modules/projects/components/steps/SecondStep';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useAppDispatch } from 'store';
 import { productsActions, productsSelectors } from 'store/products';
 import { Product } from 'store/products/products.types';
-import { projectsSelectors } from 'store/projects';
 import ProductsTable from '../components/ProductsTable';
 import AddProduct from '../forms/AddProduct';
 import { ProductFormData } from '../forms/AddProduct';
@@ -18,21 +17,9 @@ const ProductsPage = () => {
 
   const dispatch = useAppDispatch();
 
-  const projects = useSelector(projectsSelectors.getAll);
-  const project = useSelector(projectsSelectors.getById(projectId || ''));
-  const projectsFetched = useSelector(projectsSelectors.getFetched);
-
   const products = useSelector(
     productsSelectors.getByProjectId(projectId || ''),
   );
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!projectId) return;
-    if (projectsFetched && !Object.keys(projects).includes(projectId))
-      navigate('/');
-  }, [projects, navigate, projectId, projectsFetched]);
 
   const addProduct = useCallback(
     async (
@@ -79,9 +66,7 @@ const ProductsPage = () => {
   }, []);
 
   return (
-    <ProjectLayout
-      project={{ name: project?.name || '', id: project?.id || '' }}
-    >
+    <ProjectLayout>
       <Typography variant="h4" marginBottom="30px">
         Products
       </Typography>

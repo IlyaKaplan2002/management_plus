@@ -1,19 +1,29 @@
 import { ReactNode, useCallback, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch } from 'store';
 import { costsCategoriesActions } from 'store/costsCategories';
+import { normativePriceActions } from 'store/normativePrice';
+import { periodsActions } from 'store/periods';
+import { plannedSellQuantityActions } from 'store/plannedSellQuantity';
 import { productsActions } from 'store/products';
+import { projectsSelectors } from 'store/projects';
 import DefaultLayout from './DefaultLayout';
 
 interface ProjectLayoutProps {
-  project?: { name: string; id: string };
   children: ReactNode;
 }
 
-const ProjectLayout = ({ project, children }: ProjectLayoutProps) => {
+const ProjectLayout = ({ children }: ProjectLayoutProps) => {
   const { id: projectId } = useParams();
 
   const dispatch = useAppDispatch();
+
+  const projects = useSelector(projectsSelectors.getAll);
+  const project = useSelector(projectsSelectors.getById(projectId || ''));
+  const projectsFetched = useSelector(projectsSelectors.getFetched);
+
+  const navigate = useNavigate();
 
   const fetchProducts = useCallback(async () => {
     if (!projectId) return;
@@ -25,10 +35,40 @@ const ProjectLayout = ({ project, children }: ProjectLayoutProps) => {
     await dispatch(costsCategoriesActions.get(projectId));
   }, [dispatch, projectId]);
 
+  const fetchPeriods = useCallback(async () => {
+    if (!projectId) return;
+    await dispatch(periodsActions.get(projectId));
+  }, [projectId, dispatch]);
+
+  const fetchNormativePrices = useCallback(async () => {
+    if (!projectId) return;
+    await dispatch(normativePriceActions.getByProjectId({ projectId }));
+  }, [projectId, dispatch]);
+
+  const fetchPlannedSellQuantities = useCallback(async () => {
+    if (!projectId) return;
+    await dispatch(plannedSellQuantityActions.getByProjectId({ projectId }));
+  }, [projectId, dispatch]);
+
   useEffect(() => {
     fetchProducts();
     fetchCostsCategories();
-  }, [fetchProducts, fetchCostsCategories]);
+    fetchPeriods();
+    fetchNormativePrices();
+    fetchPlannedSellQuantities();
+  }, [
+    fetchProducts,
+    fetchCostsCategories,
+    fetchPeriods,
+    fetchNormativePrices,
+    fetchPlannedSellQuantities,
+  ]);
+
+  useEffect(() => {
+    if (!projectId) return;
+    if (projectsFetched && !Object.keys(projects).includes(projectId))
+      navigate('/');
+  }, [projects, navigate, projectId, projectsFetched]);
 
   return (
     <DefaultLayout showDrawer project={project}>

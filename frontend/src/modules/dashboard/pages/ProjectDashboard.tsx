@@ -1,10 +1,9 @@
 import ErrorAlert from 'components/ErrorAlert';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAppDispatch } from 'store';
-import { projectsSelectors } from 'store/projects';
 import { statisticsActions, statisticsSelectors } from 'store/statistics';
 import ProfitableChart from '../../projects/components/ProfitableChart';
 import StatisticsChart from '../../projects/components/StatisticsChart';
@@ -25,11 +24,6 @@ const ProjectDashboard = () => {
     statisticsSelectors.getProfitableChartData(projectId || ''),
   );
   const statisticsError = useSelector(statisticsSelectors.getError);
-  const projects = useSelector(projectsSelectors.getAll);
-  const project = useSelector(projectsSelectors.getById(projectId || ''));
-  const projectsFetched = useSelector(projectsSelectors.getFetched);
-
-  const navigate = useNavigate();
 
   const fetchStatistics = useCallback(async () => {
     if (!projectId || statistics) return;
@@ -37,27 +31,12 @@ const ProjectDashboard = () => {
     setAlertOpen(true);
   }, [projectId, dispatch, statistics]);
 
-  // const addStatistics = useCallback(
-  //   async (data: StatisticsCreate) => {
-  //     if (!projectId) return;
-  //     dispatch(statisticsActions.create({ projectId, data }));
-  //     setAlertOpen(true);
-  //   },
-  //   [projectId, dispatch],
-  // );
-
-  useEffect(() => {
-    if (!projectId) return;
-    if (projectsFetched && !Object.keys(projects).includes(projectId))
-      navigate('/');
-  }, [projects, navigate, projectId, projectsFetched]);
-
   useEffect(() => {
     fetchStatistics();
   }, [fetchStatistics]);
 
   return (
-    <ProjectLayout project={{ name: project?.name || '', id: projectId || '' }}>
+    <ProjectLayout>
       <ProjectDashboard.Wrapper>
         <ProjectDashboard.LeftWrapper>
           <ProjectDashboard.ChartsWrapper>

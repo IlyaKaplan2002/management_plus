@@ -14,6 +14,7 @@ import NotFound from './pages/NotFound';
 import { RouteItem } from './types';
 import SettingsPage from 'modules/settings/pages/SettingsPage';
 import ProductsPage from 'modules/products/pages/ProductsPage';
+import PeriodsPage from 'modules/periods/pages/PeriodsPage';
 
 export const routes: { [key: string]: RouteItem } = {
   projects: {
@@ -61,7 +62,7 @@ export const routes: { [key: string]: RouteItem } = {
   },
   projectPeriods: {
     name: 'Periods',
-    element: ProjectDashboard,
+    element: PeriodsPage,
     path: '/projects/:id/periods',
     isProtected: true,
     isRestricted: false,

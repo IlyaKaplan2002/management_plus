@@ -6,9 +6,9 @@ import AddCostsCategory, {
   CostsCategoryFormData,
 } from 'modules/costsCategories/forms/AddCostsCategory';
 import AddProject from 'modules/projects/forms/AddProject';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useAppDispatch } from 'store';
 import {
   costsCategoriesActions,
@@ -27,26 +27,16 @@ const SettingsPage = () => {
 
   const dispatch = useAppDispatch();
 
-  const projects = useSelector(projectsSelectors.getAll);
   const project = useSelector(projectsSelectors.getById(projectId || ''));
-  const projectsFetched = useSelector(projectsSelectors.getFetched);
 
   const costsCategories = useSelector(
     costsCategoriesSelectors.getByProjectId(projectId || ''),
   );
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!projectId) return;
-    if (projectsFetched && !Object.keys(projects).includes(projectId))
-      navigate('/');
-  }, [projects, navigate, projectId, projectsFetched]);
-
   const onProjectDelete = useCallback(async () => {
     if (!projectId) return;
     await dispatch(projectsActions.delete(projectId));
-  }, [dispatch, projectId, navigate]);
+  }, [dispatch, projectId]);
 
   const onProjectEdit = useCallback(
     async (data: ProjectCreate) => {
@@ -81,9 +71,7 @@ const SettingsPage = () => {
   }, []);
 
   return (
-    <ProjectLayout
-      project={{ id: project?.id || '', name: project?.name || '' }}
-    >
+    <ProjectLayout>
       <Typography variant="h4" marginBottom="30px">
         Settings
       </Typography>

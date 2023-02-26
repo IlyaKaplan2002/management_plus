@@ -36,7 +36,7 @@ router.use('/:period/income-statistics', incomeStatisticsRouter);
 
 router.use('/:period/other-income-statistics', otherIncomeStatisticsRouter);
 
-router.use('/:period/normative-price', normativePriceRouter);
+router.use('/:period/normative-prices', normativePriceRouter);
 
 router.use(
   '/:period/manufactured-quantity-statistics',
