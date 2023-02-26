@@ -1,26 +1,23 @@
-const namespace = 'PRODUCT';
+const namespace = 'COSTS_CATEGORY';
 
 export const CREATE = `${namespace}/CREATE`;
 export const CREATE_MANY = `${namespace}/CREATE_MANY`;
 export const GET = `${namespace}/GET`;
-export const UPDATE = `${namespace}/UPDATE`;
 export const DELETE = `${namespace}/DELETE`;
 
-export interface ProductCreate {
+export interface CostsCategoryCreate {
   name: string;
-  price: number;
-  cost: number;
 }
 
-export type Product = ProductCreate & {
+export type CostsCategory = CostsCategoryCreate & {
   id: string;
   projectId: string;
 };
 
-export interface ProductsState {
+export interface CostsCategoriesState {
   items: {
     [projectId: string]: {
-      [key: string]: Product;
+      [key: string]: CostsCategory;
     };
   };
   loading: boolean;

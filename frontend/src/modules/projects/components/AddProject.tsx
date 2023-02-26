@@ -2,15 +2,22 @@ import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { IconButton, Slide, Typography } from '@mui/material';
 import { Close } from '@mui/icons-material';
-import FirstStep from '../forms/steps/FirstStep';
+import FirstStep from './steps/FirstStep';
 import { useAppDispatch } from 'store/index';
 import { projectsActions, projectsSelectors } from 'store/projects';
 import { ProjectCreate } from 'store/projects/projects.types';
 import ErrorAlert from 'components/ErrorAlert';
 import { useSelector } from 'react-redux';
-import SecondStep from '../forms/steps/SecondStep';
+import SecondStep from './steps/SecondStep';
 import { ProductCreate } from 'store/products/products.types';
 import { productsActions, productsSelectors } from 'store/products';
+import ThirdStep from './steps/ThirdStep';
+import { CostsCategoryCreate } from 'store/costsCategories/costsCategories.types';
+import {
+  costsCategoriesActions,
+  costsCategoriesSelectors,
+} from 'store/costsCategories';
+import { useNavigate } from 'react-router-dom';
 
 interface AddProjectProps {
   open: boolean;
@@ -21,6 +28,9 @@ interface AddProjectProps {
 
 const AddProject = ({ open, setOpen, step, setStep }: AddProjectProps) => {
   const [alertOpen, setAlertOpen] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
   const createProjectError = useSelector(projectsSelectors.getError);
@@ -30,6 +40,10 @@ const AddProject = ({ open, setOpen, step, setStep }: AddProjectProps) => {
 
   const createProductsError = useSelector(productsSelectors.getError);
 
+  const createCostsCategoriesError = useSelector(
+    costsCategoriesSelectors.getError,
+  );
+
   const onProjectCreate = useCallback(
     async (createData: ProjectCreate) => {
       await dispatch(projectsActions.create(createData));
@@ -38,6 +52,8 @@ const AddProject = ({ open, setOpen, step, setStep }: AddProjectProps) => {
     },
     [dispatch, setStep],
   );
+
+  const onProductSpend = useCallback(() => setStep(3), []);
 
   const onProductsCreate = useCallback(
     async (createData: ProductCreate[]) => {
@@ -49,9 +65,40 @@ const AddProject = ({ open, setOpen, step, setStep }: AddProjectProps) => {
           products: createData,
         }),
       );
-      setOpen(false);
+      setStep(3);
     },
     [currentlyCreatingProject, dispatch, setOpen],
+  );
+
+  const onCostsCategorySpend = useCallback(() => {
+    if (!currentlyCreatingProject) {
+      navigate(`/projects`);
+      setError('Failed');
+      return;
+    }
+
+    navigate(`/projects/${currentlyCreatingProject}`);
+    setOpen(false);
+  }, [navigate]);
+
+  const onCostsCategoriesCreate = useCallback(
+    async (createData: CostsCategoryCreate[]) => {
+      if (!currentlyCreatingProject) {
+        navigate(`/projects`);
+        setError('Failed');
+        return;
+      }
+
+      await dispatch(
+        costsCategoriesActions.createMany({
+          projectId: currentlyCreatingProject,
+          costsCategories: createData,
+        }),
+      );
+      navigate(`/projects/${currentlyCreatingProject}`);
+      setOpen(false);
+    },
+    [currentlyCreatingProject, setOpen, dispatch, navigate],
   );
 
   return (
@@ -69,19 +116,37 @@ const AddProject = ({ open, setOpen, step, setStep }: AddProjectProps) => {
               <Close color="action" />
             </IconButton>
             <AddProject.Steps variant="subtitle1">
-              Create project (Step {step} of 1)
+              Create {step === 1 && 'project'}
+              {step === 2 && 'products'}
+              {step === 3 && 'costs categories'}(Step {step} of 3)
             </AddProject.Steps>
           </AddProject.TopWrapper>
 
           <AddProject.BottomWrapper>
             {step === 1 && <FirstStep onCreate={onProjectCreate} />}
-            {step === 2 && <SecondStep onCreate={onProductsCreate} />}
+            {step === 2 && (
+              <SecondStep
+                onCreate={onProductsCreate}
+                onSpendClick={onProductSpend}
+              />
+            )}
+            {step === 3 && (
+              <ThirdStep
+                onCreate={onCostsCategoriesCreate}
+                onSpendClick={onCostsCategorySpend}
+              />
+            )}
           </AddProject.BottomWrapper>
         </AddProject.Wrapper>
       </AddProject.Container>
       <ErrorAlert
         open={alertOpen}
-        error={createProjectError || createProductsError}
+        error={
+          createProjectError ||
+          createProductsError ||
+          createCostsCategoriesError ||
+          error
+        }
         setOpen={setAlertOpen}
       />
     </>

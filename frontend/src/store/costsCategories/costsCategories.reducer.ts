@@ -1,10 +1,10 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { authActions } from 'store/auth';
 import { Action } from 'store/types';
-import productsActions from './products.actions';
-import { ProductsState } from './products.types';
+import costsCategoriesActions from './costsCategories.actions';
+import { CostsCategoriesState } from './costsCategories.types';
 
-const initialState: ProductsState = {
+const initialState: CostsCategoriesState = {
   items: {},
   fetched: false,
   loading: false,
@@ -12,16 +12,16 @@ const initialState: ProductsState = {
 };
 
 const reducer = createReducer(initialState, {
-  [productsActions.get.pending.type]: (
-    state: ProductsState,
-  ): ProductsState => ({
+  [costsCategoriesActions.get.pending.type]: (
+    state: CostsCategoriesState,
+  ): CostsCategoriesState => ({
     ...state,
     loading: true,
   }),
-  [productsActions.get.fulfilled.type]: (
-    state: ProductsState,
+  [costsCategoriesActions.get.fulfilled.type]: (
+    state: CostsCategoriesState,
     action: Action,
-  ): ProductsState => {
+  ): CostsCategoriesState => {
     const items = action.payload.reduce(
       (acc, item) => ({
         ...acc,
@@ -40,55 +40,55 @@ const reducer = createReducer(initialState, {
       loading: false,
     };
   },
-  [productsActions.get.rejected.type]: (
-    state: ProductsState,
+  [costsCategoriesActions.get.rejected.type]: (
+    state: CostsCategoriesState,
     action: Action,
-  ): ProductsState => ({
+  ): CostsCategoriesState => ({
     ...state,
     error: action.payload,
     fetched: true,
     loading: false,
   }),
 
-  [productsActions.create.pending.type]: (
-    state: ProductsState,
-  ): ProductsState => ({
+  [costsCategoriesActions.create.pending.type]: (
+    state: CostsCategoriesState,
+  ): CostsCategoriesState => ({
     ...state,
     loading: true,
   }),
-  [productsActions.create.fulfilled.type]: (
-    state: ProductsState,
+  [costsCategoriesActions.create.fulfilled.type]: (
+    state: CostsCategoriesState,
     action: Action,
-  ): ProductsState => ({
+  ): CostsCategoriesState => ({
     ...state,
     items: {
       ...state.items,
       [action.payload.projectId]: {
-        [action.payload.id]: { ...action.payload },
         ...(state.items[action.payload.projectId] || {}),
+        [action.payload.id]: { ...action.payload },
       },
     },
     loading: false,
   }),
-  [productsActions.create.rejected.type]: (
-    state: ProductsState,
+  [costsCategoriesActions.create.rejected.type]: (
+    state: CostsCategoriesState,
     action: Action,
-  ): ProductsState => ({
+  ): CostsCategoriesState => ({
     ...state,
     error: action.payload,
     loading: false,
   }),
 
-  [productsActions.createMany.pending.type]: (
-    state: ProductsState,
-  ): ProductsState => ({
+  [costsCategoriesActions.createMany.pending.type]: (
+    state: CostsCategoriesState,
+  ): CostsCategoriesState => ({
     ...state,
     loading: true,
   }),
-  [productsActions.createMany.fulfilled.type]: (
-    state: ProductsState,
+  [costsCategoriesActions.createMany.fulfilled.type]: (
+    state: CostsCategoriesState,
     action: Action,
-  ): ProductsState => {
+  ): CostsCategoriesState => {
     const items = action.payload.reduce(
       (acc, item) => ({
         ...acc,
@@ -107,50 +107,27 @@ const reducer = createReducer(initialState, {
       loading: false,
     };
   },
-  [productsActions.createMany.rejected.type]: (
-    state: ProductsState,
+  [costsCategoriesActions.createMany.rejected.type]: (
+    state: CostsCategoriesState,
     action: Action,
-  ): ProductsState => ({
+  ): CostsCategoriesState => ({
     ...state,
     error: action.payload,
     loading: false,
   }),
 
-  [productsActions.update.pending.type]: (
-    state: ProductsState,
-  ): ProductsState => ({
+  [costsCategoriesActions.delete.pending.type]: (
+    state: CostsCategoriesState,
+  ): CostsCategoriesState => ({
     ...state,
     loading: true,
   }),
-  [productsActions.update.fulfilled.type]: (
-    state: ProductsState,
+  [costsCategoriesActions.delete.fulfilled.type]: (
+    state: CostsCategoriesState,
     action: Action,
-  ): ProductsState => {
-    state.items[action.payload.projectId][action.payload.id] = action.payload;
-
-    return state;
-  },
-  [productsActions.update.rejected.type]: (
-    state: ProductsState,
-    action: Action,
-  ): ProductsState => ({
-    ...state,
-    error: action.payload,
-    loading: false,
-  }),
-
-  [productsActions.delete.pending.type]: (
-    state: ProductsState,
-  ): ProductsState => ({
-    ...state,
-    loading: true,
-  }),
-  [productsActions.delete.fulfilled.type]: (
-    state: ProductsState,
-    action: Action,
-  ): ProductsState => {
+  ): CostsCategoriesState => {
     const newProjectItems = { ...state.items[action.payload.projectId] };
-    delete newProjectItems[action.payload.productId];
+    delete newProjectItems[action.payload.costsCategoryId];
 
     return {
       ...state,
@@ -158,13 +135,12 @@ const reducer = createReducer(initialState, {
         ...state.items,
         [action.payload.projectId]: { ...newProjectItems },
       },
-      loading: false,
     };
   },
-  [productsActions.delete.rejected.type]: (
-    state: ProductsState,
+  [costsCategoriesActions.delete.rejected.type]: (
+    state: CostsCategoriesState,
     action: Action,
-  ): ProductsState => ({
+  ): CostsCategoriesState => ({
     ...state,
     error: action.payload,
     loading: false,

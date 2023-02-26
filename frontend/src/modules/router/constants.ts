@@ -12,6 +12,8 @@ import ProjectDashboard from 'modules/dashboard/pages/ProjectDashboard';
 import Projects from 'modules/projects/pages/Projects';
 import NotFound from './pages/NotFound';
 import { RouteItem } from './types';
+import SettingsPage from 'modules/settings/pages/SettingsPage';
+import ProductsPage from 'modules/products/pages/ProductsPage';
 
 export const routes: { [key: string]: RouteItem } = {
   projects: {
@@ -50,7 +52,7 @@ export const routes: { [key: string]: RouteItem } = {
   },
   projectProducts: {
     name: 'Products',
-    element: ProjectDashboard,
+    element: ProductsPage,
     path: '/projects/:id/products',
     isProtected: true,
     isRestricted: false,
@@ -68,7 +70,7 @@ export const routes: { [key: string]: RouteItem } = {
   },
   projectSettings: {
     name: 'Settings',
-    element: ProjectDashboard,
+    element: SettingsPage,
     path: '/projects/:id/settings',
     isProtected: true,
     isRestricted: false,

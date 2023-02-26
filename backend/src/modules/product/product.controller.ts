@@ -73,7 +73,7 @@ export default class ProductController {
         product: {
           id: product.id,
           name: product.name,
-          costs: product.cost,
+          cost: product.cost,
           price: product.price,
           projectId: product.projectId,
         },

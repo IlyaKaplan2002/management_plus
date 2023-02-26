@@ -1,8 +1,8 @@
 import { RootState } from '../types';
 
-const STATE_KEY = 'products';
+const STATE_KEY = 'costsCategories';
 
-export default class ProductsSelectors {
+export default class CostsCategoriesSelectors {
   public static getAll = (state: RootState) => state[STATE_KEY].items;
   public static getByProjectId = (projectId: string) => (state: RootState) =>
     state[STATE_KEY].items[projectId] || [];

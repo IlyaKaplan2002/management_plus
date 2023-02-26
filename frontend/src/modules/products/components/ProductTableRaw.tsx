@@ -2,15 +2,20 @@ import { Delete, Edit, Save } from '@mui/icons-material';
 import { IconButton, TableCell, TableRow } from '@mui/material';
 import InputField from 'components/InputField';
 import { FormikHelpers, useFormik } from 'formik';
-import { secondStepSchema } from 'modules/projects/schemas/secondStep';
 import { useCallback, useState } from 'react';
+import { Product } from 'store/products/products.types';
 import styled from 'styled-components';
-import { ProductData, initialValues, ProductFormData } from './SecondStep';
+import {
+  ProductData,
+  initialValues,
+} from '../../projects/components/steps/SecondStep';
+import { ProductFormData } from '../forms/AddProduct';
+import { addProductSchema } from '../schemas/addProduct';
 
 interface ProductTableRawProps {
-  product: ProductData;
+  product: ProductData | Product;
   onDelete: (id: string) => void;
-  onEdit: (data: ProductData) => void;
+  onEdit: (data: ProductData | Product) => void;
 }
 
 const ProductTableRaw = ({
@@ -28,7 +33,7 @@ const ProductTableRaw = ({
       helpers: FormikHelpers<ProductFormData>,
     ) => {
       onEdit({
-        tempId: product.tempId,
+        id: product.id,
         name,
         price: Number(price),
         cost: Number(cost),
@@ -40,7 +45,7 @@ const ProductTableRaw = ({
   const formik = useFormik({
     validateOnBlur: true,
     validateOnChange: true,
-    validationSchema: secondStepSchema,
+    validationSchema: addProductSchema,
     initialValues: {
       name: product.name,
       price: String(product.price),
@@ -121,7 +126,7 @@ const ProductTableRaw = ({
         </IconButton>
       </TableCell>
       <TableCell align="left" sx={{ width: 20 }}>
-        <IconButton onClick={() => onDelete(product.tempId)}>
+        <IconButton onClick={() => onDelete(product.id)}>
           <Delete />
         </IconButton>
       </TableCell>

@@ -1,39 +1,44 @@
-import React, { useCallback } from 'react';
-import { useFormik } from 'formik';
-import styled from 'styled-components';
-import { firstStepSchema } from '../../schemas/firstStep';
-import { ProjectCreate } from 'store/projects/projects.types';
 import { Button } from '@mui/material';
 import InputField from 'components/InputField';
+import { FormikHelpers, useFormik } from 'formik';
+import styled from 'styled-components';
+import { addProjectSchema } from '../schemas/addProject';
 
-const initialValues = {
+const defaultInitialValues = {
   name: '',
   description: '',
 };
 
-interface FirstStepProps {
-  onCreate: (value: ProjectCreate) => void;
+interface ProjectFormData {
+  name: string;
+  description: string;
 }
 
-const FirstStep = ({ onCreate }: FirstStepProps) => {
-  const onSubmit = useCallback(
-    (result: { name: string; description: string }) => {
-      onCreate(result);
-    },
-    [onCreate],
-  );
+interface AddProjectProps {
+  initialValues?: ProjectFormData;
+  onSubmit: (
+    data: ProjectFormData,
+    helpers: FormikHelpers<ProjectFormData>,
+  ) => void;
+  submitButtonText?: string;
+}
 
+const AddProject = ({
+  onSubmit,
+  initialValues,
+  submitButtonText,
+}: AddProjectProps) => {
   const formik = useFormik({
     validateOnBlur: true,
     validateOnChange: true,
-    validationSchema: firstStepSchema,
-    initialValues,
-    initialErrors: initialValues,
+    validationSchema: addProjectSchema,
+    initialValues: initialValues || defaultInitialValues,
+    initialErrors: defaultInitialValues,
     onSubmit,
   });
 
   return (
-    <FirstStep.Container onSubmit={formik.handleSubmit}>
+    <AddProject.Container onSubmit={formik.handleSubmit}>
       <InputField
         label="Project name"
         name="name"
@@ -66,13 +71,13 @@ const FirstStep = ({ onCreate }: FirstStepProps) => {
           !Boolean(formik.values.description)
         }
       >
-        Next
+        {submitButtonText || 'Submit'}
       </Button>
-    </FirstStep.Container>
+    </AddProject.Container>
   );
 };
 
-FirstStep.Container = styled.form`
+AddProject.Container = styled.form`
   width: fit-content;
   display: flex;
   flex-direction: column;
@@ -83,4 +88,4 @@ FirstStep.Container = styled.form`
   }
 `;
 
-export default FirstStep;
+export default AddProject;

@@ -2,29 +2,33 @@ import { requestWrapper } from './utils';
 import { APIResponse } from './types';
 import { AxiosError } from 'axios';
 import { API } from 'api';
-import { ProductCreate } from 'store/products/products.types';
+import { CostsCategoryCreate } from 'store/costsCategories/costsCategories.types';
 
-export default class ProductsAPI {
+export default class ProjectsAPI {
+  private static API_PATH_KEY = 'costs-category';
+
   public static get = requestWrapper(
     async (
       projectId: string,
     ): Promise<APIResponse | AxiosError<APIResponse>> => {
-      const response = await API.get(`/projects/${projectId}/products`);
+      const response = await API.get(
+        `/projects/${projectId}/${this.API_PATH_KEY}`,
+      );
       return response.data;
     },
   );
 
   public static create = requestWrapper(
     async ({
-      product,
+      costsCategory,
       projectId,
     }: {
-      product: ProductCreate;
+      costsCategory: CostsCategoryCreate;
       projectId: string;
     }): Promise<APIResponse | AxiosError<APIResponse>> => {
       const response = await API.post(
-        `/projects/${projectId}/products`,
-        product,
+        `/projects/${projectId}/${this.API_PATH_KEY}`,
+        costsCategory,
       );
       return response.data;
     },
@@ -32,33 +36,15 @@ export default class ProductsAPI {
 
   public static createMany = requestWrapper(
     async ({
-      products,
+      costsCategories,
       projectId,
     }: {
-      products: ProductCreate[];
+      costsCategories: CostsCategoryCreate[];
       projectId: string;
     }): Promise<APIResponse | AxiosError<APIResponse>> => {
       const response = await API.post(
-        `/projects/${projectId}/products/many`,
-        products,
-      );
-      return response.data;
-    },
-  );
-
-  public static update = requestWrapper(
-    async ({
-      product,
-      projectId,
-      productId,
-    }: {
-      productId: string;
-      product: ProductCreate;
-      projectId: string;
-    }): Promise<APIResponse | AxiosError<APIResponse>> => {
-      const response = await API.put(
-        `/projects/${projectId}/products/${productId}`,
-        product,
+        `/projects/${projectId}/${this.API_PATH_KEY}/many`,
+        costsCategories,
       );
       return response.data;
     },
@@ -66,14 +52,14 @@ export default class ProductsAPI {
 
   public static delete = requestWrapper(
     async ({
-      productId,
       projectId,
+      costsCategoryId,
     }: {
-      productId: string;
       projectId: string;
+      costsCategoryId: string;
     }): Promise<APIResponse | AxiosError<APIResponse>> => {
       const response = await API.delete(
-        `/projects/${projectId}/products/${productId}`,
+        `/projects/${projectId}/${this.API_PATH_KEY}/${costsCategoryId}`,
       );
       return response.data;
     },

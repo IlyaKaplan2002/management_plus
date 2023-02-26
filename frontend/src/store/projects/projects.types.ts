@@ -1,7 +1,10 @@
 const namespace = 'PROJECT';
 
-export const CREATE = `${namespace}/CREATE`;
+export const RESET_CURRENTLY_CREATING = `${namespace}/RESET_CURRENTLY_CREATING`;
 export const GET = `${namespace}/GET`;
+export const CREATE = `${namespace}/CREATE`;
+export const UPDATE = `${namespace}/UPDATE`;
+export const DELETE = `${namespace}/DELETE`;
 
 export interface ProjectCreate {
   name: string;
