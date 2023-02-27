@@ -48,6 +48,13 @@ export default class NormativePriceService {
     return normativePrices;
   };
 
+  public static findByPeriodIds = async (periodIds: string[]) => {
+    const normativePrices = await NormativePrice.createQueryBuilder()
+      .where('period_id IN (:...periodIds)', { periodIds })
+      .getMany();
+    return normativePrices;
+  };
+
   public static findByPeriodIdAndProductId = async (
     periodId: string,
     productId: string,

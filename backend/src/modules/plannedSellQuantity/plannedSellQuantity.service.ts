@@ -48,6 +48,13 @@ export default class PlannedSellQuantityService {
     return plannedSellQuantities;
   };
 
+  public static findByPeriodIds = async (periodIds: string[]) => {
+    const plannedSellQuantities = await PlannedSellQuantity.createQueryBuilder()
+      .where('period_id IN (:...periodIds)', { periodIds })
+      .getMany();
+    return plannedSellQuantities;
+  };
+
   public static findByPeriodIdAndProductId = async (
     periodId: string,
     productId: string,

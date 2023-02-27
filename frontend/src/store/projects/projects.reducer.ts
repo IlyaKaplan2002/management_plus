@@ -9,6 +9,7 @@ const initialState: ProjectsState = {
   fetched: false,
   loading: false,
   error: null,
+  currentlyCreating: null,
 };
 
 const reducer = createReducer(initialState, {
@@ -46,6 +47,7 @@ const reducer = createReducer(initialState, {
     ...state,
     items: { [action.payload.id]: action.payload, ...state.items },
     loading: false,
+    currentlyCreating: action.payload.id,
   }),
   [projectsActions.create.rejected.type]: (
     state: ProjectsState,
@@ -55,6 +57,65 @@ const reducer = createReducer(initialState, {
     error: action.payload,
     loading: false,
   }),
+
+  [projectsActions.update.pending.type]: (state: ProjectsState) => ({
+    ...state,
+    loading: true,
+  }),
+  [projectsActions.update.fulfilled.type]: (
+    state: ProjectsState,
+    action: Action,
+  ) => {
+    const newItems = { ...state.items };
+    delete newItems[action.payload.id];
+
+    return {
+      ...state,
+      items: { [action.payload.id]: action.payload, ...newItems },
+      loading: false,
+      currentlyCreating: action.payload.id,
+    };
+  },
+  [projectsActions.update.rejected.type]: (
+    state: ProjectsState,
+    action: Action,
+  ) => ({
+    ...state,
+    error: action.payload,
+    loading: false,
+  }),
+
+  [projectsActions.delete.pending.type]: (state: ProjectsState) => ({
+    ...state,
+    loading: true,
+  }),
+  [projectsActions.delete.fulfilled.type]: (
+    state: ProjectsState,
+    action: Action,
+  ) => {
+    const newItems = { ...state.items };
+
+    delete newItems[action.payload];
+
+    return {
+      ...state,
+      items: { ...newItems },
+      loading: false,
+      currentlyCreating: action.payload.id,
+    };
+  },
+  [projectsActions.delete.rejected.type]: (
+    state: ProjectsState,
+    action: Action,
+  ) => ({
+    ...state,
+    error: action.payload,
+    loading: false,
+  }),
+
+  [projectsActions.resetCurrentlyCreating.type]: (
+    state: ProjectsState,
+  ): ProjectsState => ({ ...state, currentlyCreating: null }),
 
   [authActions.logout.rejected.type]: () => initialState,
   [authActions.logout.fulfilled.type]: () => initialState,

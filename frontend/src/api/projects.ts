@@ -20,4 +20,24 @@ export default class ProjectsAPI {
       return response.data;
     },
   );
+
+  public static update = requestWrapper(
+    async ({
+      projectData,
+      projectId,
+    }: {
+      projectId: string;
+      projectData: ProjectCreate;
+    }): Promise<APIResponse | AxiosError<APIResponse>> => {
+      const response = await API.put(`/projects/${projectId}`, projectData);
+      return response.data;
+    },
+  );
+
+  public static delete = requestWrapper(
+    async (id: string): Promise<APIResponse | AxiosError<APIResponse>> => {
+      const response = await API.delete(`/projects/${id}`);
+      return response.data;
+    },
+  );
 }

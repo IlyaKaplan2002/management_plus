@@ -38,6 +38,8 @@ export default class PeriodService {
 
   public static findByProjectId = async (projectId: string) => {
     const periods = await Period.findBy({ projectId });
-    return periods;
+    return periods.sort(
+      (a, b) => b.startDate.getTime() - a.startDate.getTime(),
+    );
   };
 }
