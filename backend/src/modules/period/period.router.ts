@@ -9,6 +9,7 @@ import incomeStatisticsRouter from '../incomeStatistics';
 import otherIncomeStatisticsRouter from '../otherIncomeStatistics';
 import normativePriceRouter from '../normativePrice';
 import manufacturedQuantityStatisticsRouter from '../manufacturedQuantityStatistics';
+import costsStatisticsRouter from '../costsStatistics';
 
 const router = Router({ mergeParams: true });
 
@@ -35,6 +36,8 @@ router.use('/:period/planned-sell-quantities', plannedSellQuantityRouter);
 router.use('/:period/income-statistics', incomeStatisticsRouter);
 
 router.use('/:period/other-income-statistics', otherIncomeStatisticsRouter);
+
+router.use('/:period/costs-statistics', costsStatisticsRouter);
 
 router.use('/:period/normative-prices', normativePriceRouter);
 

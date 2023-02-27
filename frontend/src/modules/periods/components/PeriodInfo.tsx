@@ -82,7 +82,6 @@ const PeriodInfo = ({ open, periodId, onClose, number }: PeriodInfoProps) => {
                       key={product.id}
                       product={product}
                       periodId={periodId}
-                      currentPeriodId={currentPeriod?.id || ''}
                     />
                   );
                 })}

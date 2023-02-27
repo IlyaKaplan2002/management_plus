@@ -1,6 +1,8 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import { authReducer } from './auth';
 import { costsCategoriesReducer } from './costsCategories';
+import { incomeStatisticsReducer } from './incomeStatistics';
+import { manufacturedQuantityStatisticsReducer } from './manufacturedQuantityStatistics';
 import { normativePriceReducer } from './normativePrice';
 import { periodsReducer } from './periods';
 import { plannedSellQuantityReducer } from './plannedSellQuantity';
@@ -17,6 +19,8 @@ const rootReducer = combineReducers({
   periods: periodsReducer,
   normativePrice: normativePriceReducer,
   plannedSellQuantity: plannedSellQuantityReducer,
+  incomeStatistics: incomeStatisticsReducer,
+  manufacturedQuantityStatistics: manufacturedQuantityStatisticsReducer,
 });
 
 export default rootReducer;

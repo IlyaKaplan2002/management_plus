@@ -10,6 +10,10 @@ import productRouter from '../product';
 import periodRouter from '../period';
 import costsCategoryRouter from '../costsCategory';
 import NormativePriceController from '@modules/normativePrice/normativePrice.controller';
+import IncomeStatisticsController from '@modules/incomeStatistics/incomeStatistics.controller';
+import OtherIncomeStatisticsController from '@modules/otherIncomeStatistics/otherIncomeStatistics.controller';
+import CostsStatisticsController from '@modules/costsStatistics/costsStatistics.controller';
+import ManufacturedQuantityStatisticsController from '@modules/manufacturedQuantityStatistics/manufacturedQuantityStatistics.controller';
 
 const router = Router();
 
@@ -41,6 +45,30 @@ router.get(
   '/:project/planned-sell-quantities',
   auth(),
   ctrlWrapper(PlannedSellQuantityController.getByProjectId),
+);
+
+router.get(
+  '/:project/income-statistics',
+  auth(),
+  ctrlWrapper(IncomeStatisticsController.getByProjectId),
+);
+
+router.get(
+  '/:project/other-income-statistics',
+  auth(),
+  ctrlWrapper(OtherIncomeStatisticsController.getByProjectId),
+);
+
+router.get(
+  '/:project/costs-statistics',
+  auth(),
+  ctrlWrapper(CostsStatisticsController.getByProjectId),
+);
+
+router.get(
+  '/:project/manufactured-quantity-statistics',
+  auth(),
+  ctrlWrapper(ManufacturedQuantityStatisticsController.getByProjectId),
 );
 
 router.use('/:project/statistics', statisticsRouter);
