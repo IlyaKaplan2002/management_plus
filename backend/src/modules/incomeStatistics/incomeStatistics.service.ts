@@ -54,6 +54,13 @@ export default class IncomeStatisticsService {
     return incomeStatistics;
   };
 
+  public static findByPeriodIds = async (periodIds: string[]) => {
+    const incomeStatistics = await IncomeStatistics.createQueryBuilder()
+      .where('period_id IN (:...periodIds)', { periodIds })
+      .getMany();
+    return incomeStatistics;
+  };
+
   public static findByPeriodIdAndProductId = async (
     periodId: string,
     productId: string,

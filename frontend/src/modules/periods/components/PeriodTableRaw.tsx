@@ -23,7 +23,6 @@ import { useParams } from 'react-router-dom';
 interface ProductTableRawProps {
   product: Product;
   periodId: string;
-  currentPeriodId: string;
 }
 
 interface PeriodFormData {
@@ -31,11 +30,7 @@ interface PeriodFormData {
   plannedSellQuantity: string;
 }
 
-const PeriodTableRaw = ({
-  product,
-  periodId,
-  currentPeriodId,
-}: ProductTableRawProps) => {
+const PeriodTableRaw = ({ product, periodId }: ProductTableRawProps) => {
   const { id: projectId } = useParams();
 
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -82,11 +77,6 @@ const PeriodTableRaw = ({
         ? plannedSellQuantities[Object.keys(plannedSellQuantities)[0]]
         : null,
     [plannedSellQuantities, plannedSellQuantityExists],
-  );
-
-  const isCurrent = useMemo(
-    () => currentPeriodId === periodId,
-    [currentPeriodId, periodId],
   );
 
   const onSubmit = useCallback(
@@ -171,14 +161,13 @@ const PeriodTableRaw = ({
   });
 
   const onEditClick = useCallback(() => {
-    if (!isCurrent) return;
     if (editMode) {
       toggleEdit();
       formik.handleSubmit();
     } else {
       toggleEdit();
     }
-  }, [formik.handleSubmit, toggleEdit, isCurrent]);
+  }, [formik.handleSubmit, toggleEdit]);
 
   return (
     <PeriodTableRaw.TableRow>
@@ -220,11 +209,9 @@ const PeriodTableRaw = ({
         )}
       </TableCell>
       <TableCell align="left" sx={{ width: 20 }}>
-        {isCurrent && (
-          <IconButton onClick={onEditClick}>
-            {editMode ? <Save /> : <Edit />}
-          </IconButton>
-        )}
+        <IconButton onClick={onEditClick}>
+          {editMode ? <Save /> : <Edit />}
+        </IconButton>
       </TableCell>
     </PeriodTableRaw.TableRow>
   );

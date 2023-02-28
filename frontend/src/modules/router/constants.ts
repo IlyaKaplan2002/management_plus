@@ -15,6 +15,7 @@ import { RouteItem } from './types';
 import SettingsPage from 'modules/settings/pages/SettingsPage';
 import ProductsPage from 'modules/products/pages/ProductsPage';
 import PeriodsPage from 'modules/periods/pages/PeriodsPage';
+import StatisticsPage from 'modules/statistics/pages/StatisticsPage';
 
 export const routes: { [key: string]: RouteItem } = {
   projects: {
@@ -44,7 +45,7 @@ export const routes: { [key: string]: RouteItem } = {
   },
   projectStatistics: {
     name: 'Statistics',
-    element: ProjectDashboard,
+    element: StatisticsPage,
     path: '/projects/:id/statistics',
     isProtected: true,
     isRestricted: false,

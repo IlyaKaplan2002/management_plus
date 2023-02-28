@@ -44,6 +44,30 @@ export default class IncomeStatisticsController {
     createResponse({ res, data: { incomeStatistics } });
   };
 
+  public static getByProjectId = async (req: Request, res: Response) => {
+    const { id: userId } = req.user;
+    const { project: projectId } = req.params;
+
+    const project = await ProjectService.findById(projectId);
+    if (!project || project.userId !== userId)
+      throwError('Project not found', 404);
+
+    const periods = await PeriodService.findByProjectId(projectId);
+
+    const periodIds = periods.map(item => item.id);
+
+    if (!periodIds.length) {
+      createResponse({ res, data: { incomeStatistics: [] } });
+      return;
+    }
+
+    const incomeStatistics = await IncomeStatisticsService.findByPeriodIds(
+      periodIds,
+    );
+
+    createResponse({ res, data: { incomeStatistics } });
+  };
+
   public static create = async (req: Request, res: Response) => {
     const { id: userId } = req.user;
     const { project: projectId, period: periodId } = req.params;

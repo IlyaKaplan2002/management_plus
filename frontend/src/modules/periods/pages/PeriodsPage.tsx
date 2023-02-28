@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import ProjectLayout from 'components/ProjectLayout';
 import dayjs from 'dayjs';
 import { useCallback, useMemo, useState } from 'react';
@@ -49,7 +49,12 @@ const PeriodsPage = () => {
 
   return (
     <ProjectLayout>
-      <Button onClick={onStartNewPeriod}>Start new period</Button>
+      <Typography variant="h4" marginBottom="30px">
+        Reporting periods
+      </Typography>
+      <Button onClick={onStartNewPeriod} sx={{ marginBottom: '20px' }}>
+        Start new period
+      </Button>
       <PeriodsPage.List>
         {Boolean(periods) &&
           Object.values(periods).map((item, indx) => (

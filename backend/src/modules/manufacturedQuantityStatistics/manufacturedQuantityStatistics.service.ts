@@ -59,6 +59,14 @@ export default class ManufacturedQuantityStatisticsService {
     return manufacturedQuantityStatistics;
   };
 
+  public static findByPeriodIds = async (periodIds: string[]) => {
+    const manufacturedQuantityStatistics =
+      await ManufacturedQuantityStatistics.createQueryBuilder()
+        .where('period_id IN (:...periodIds)', { periodIds })
+        .getMany();
+    return manufacturedQuantityStatistics;
+  };
+
   public static findByPeriodIdAndProductId = async (
     periodId: string,
     productId: string,

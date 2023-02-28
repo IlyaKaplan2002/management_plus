@@ -42,4 +42,12 @@ export default class OtherIncomeStatisticsService {
     });
     return otherIncomeStatistics;
   };
+
+  public static findByPeriodIds = async (periodIds: string[]) => {
+    const otherIncomeStatistics =
+      await OtherIncomeStatistics.createQueryBuilder()
+        .where('period_id IN (:...periodIds)', { periodIds })
+        .getMany();
+    return otherIncomeStatistics;
+  };
 }
