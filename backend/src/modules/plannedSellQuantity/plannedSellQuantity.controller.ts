@@ -55,6 +55,11 @@ export default class PlannedSellQuantityController {
 
     const periodIds = periods.map(item => item.id);
 
+    if (!periodIds.length) {
+      createResponse({ res, data: { plannedSellQuantities: [] } });
+      return;
+    }
+
     const plannedSellQuantities =
       await PlannedSellQuantityService.findByPeriodIds(periodIds);
 

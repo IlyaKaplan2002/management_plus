@@ -56,6 +56,11 @@ export default class IncomeStatisticsController {
 
     const periodIds = periods.map(item => item.id);
 
+    if (!periodIds.length) {
+      createResponse({ res, data: { incomeStatistics: [] } });
+      return;
+    }
+
     const incomeStatistics = await IncomeStatisticsService.findByPeriodIds(
       periodIds,
     );

@@ -1,5 +1,6 @@
 import { Close } from '@mui/icons-material';
 import {
+  Button,
   IconButton,
   Slide,
   Table,
@@ -12,7 +13,7 @@ import {
 } from '@mui/material';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { periodsSelectors } from 'store/periods';
 import { productsSelectors } from 'store/products';
 import styled from 'styled-components';
@@ -27,6 +28,8 @@ interface PeriodInfoProps {
 
 const PeriodInfo = ({ open, periodId, onClose, number }: PeriodInfoProps) => {
   const { id: projectId } = useParams();
+
+  const navigate = useNavigate();
 
   const currentPeriod = useSelector(
     periodsSelectors.getCurrentPeriod(projectId || ''),
@@ -65,29 +68,40 @@ const PeriodInfo = ({ open, periodId, onClose, number }: PeriodInfoProps) => {
         </PeriodInfo.TopWrapper>
 
         <PeriodInfo.BottomWrapper>
-          <TableContainer sx={{ maxHeight: 440 }}>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="left">Product name</TableCell>
-                  <TableCell align="left">Normative price</TableCell>
-                  <TableCell align="left">Planned sales volume</TableCell>
-                  <TableCell align="left" sx={{ width: 20 }} />
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {Object.values(products).map(product => {
-                  return (
-                    <PeriodTableRaw
-                      key={product.id}
-                      product={product}
-                      periodId={periodId}
-                    />
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          {Boolean(Object.keys(products).length) && (
+            <TableContainer sx={{ maxHeight: 440 }}>
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="left">Product name</TableCell>
+                    <TableCell align="left">Normative price</TableCell>
+                    <TableCell align="left">Planned sales volume</TableCell>
+                    <TableCell align="left" sx={{ width: 20 }} />
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {Object.values(products).map(product => {
+                    return (
+                      <PeriodTableRaw
+                        key={product.id}
+                        product={product}
+                        periodId={periodId}
+                      />
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+
+          {!Boolean(Object.keys(products).length) && (
+            <Button
+              sx={{ display: 'block' }}
+              onClick={() => navigate(`/projects/${projectId}/products`)}
+            >
+              Create a product first
+            </Button>
+          )}
         </PeriodInfo.BottomWrapper>
       </PeriodInfo.Wrapper>
     </PeriodInfo.Container>

@@ -55,6 +55,11 @@ export default class ManufacturedQuantityStatisticsController {
 
     const periodIds = periods.map(item => item.id);
 
+    if (!periodIds.length) {
+      createResponse({ res, data: { manufacturedQuantityStatistics: [] } });
+      return;
+    }
+
     const manufacturedQuantityStatistics =
       await ManufacturedQuantityStatisticsService.findByPeriodIds(periodIds);
 

@@ -56,6 +56,11 @@ export default class NormativePriceController {
 
     const periodIds = periods.map(item => item.id);
 
+    if (!periodIds.length) {
+      createResponse({ res, data: { normativePrices: [] } });
+      return;
+    }
+
     const normativePrices = await NormativePriceService.findByPeriodIds(
       periodIds,
     );

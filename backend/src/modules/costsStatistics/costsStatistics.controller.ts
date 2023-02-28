@@ -56,6 +56,11 @@ export default class CostsStatisticsController {
 
     const periodIds = periods.map(item => item.id);
 
+    if (!periodIds.length) {
+      createResponse({ res, data: { costsStatistics: [] } });
+      return;
+    }
+
     const costsStatistics = await CostsStatisticsService.findByPeriodIds(
       periodIds,
     );

@@ -3,9 +3,11 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch } from 'store';
 import { costsCategoriesActions } from 'store/costsCategories';
+import { costsStatisticsActions } from 'store/costsStatistics';
 import { incomeStatisticsActions } from 'store/incomeStatistics';
 import { manufacturedQuantityStatisticsActions } from 'store/manufacturedQuantityStatistics';
 import { normativePriceActions } from 'store/normativePrice';
+import { otherIncomeStatisticsActions } from 'store/otherIncomeStatistics';
 import { periodsActions } from 'store/periods';
 import { plannedSellQuantityActions } from 'store/plannedSellQuantity';
 import { productsActions } from 'store/products';
@@ -64,6 +66,16 @@ const ProjectLayout = ({ children }: ProjectLayoutProps) => {
     );
   }, [dispatch, projectId]);
 
+  const fetchOtherIncomeStatistics = useCallback(async () => {
+    if (!projectId) return;
+    dispatch(otherIncomeStatisticsActions.getByProjectId({ projectId }));
+  }, [dispatch, projectId]);
+
+  const fetchCostsStatistics = useCallback(async () => {
+    if (!projectId) return;
+    dispatch(costsStatisticsActions.getByProjectId({ projectId }));
+  }, [dispatch, projectId]);
+
   useEffect(() => {
     fetchProducts();
     fetchCostsCategories();
@@ -72,6 +84,8 @@ const ProjectLayout = ({ children }: ProjectLayoutProps) => {
     fetchPlannedSellQuantities();
     fetchIncomeStatistics();
     fetchManufacturedQuantityStatistics();
+    fetchOtherIncomeStatistics();
+    fetchCostsStatistics();
   }, [
     fetchProducts,
     fetchCostsCategories,
@@ -80,6 +94,8 @@ const ProjectLayout = ({ children }: ProjectLayoutProps) => {
     fetchPlannedSellQuantities,
     fetchIncomeStatistics,
     fetchManufacturedQuantityStatistics,
+    fetchOtherIncomeStatistics,
+    fetchCostsStatistics,
   ]);
 
   useEffect(() => {

@@ -46,8 +46,7 @@ const AddManufacturedStatistics = ({
     productsSelectors.getByProjectId(projectId || ''),
   );
 
-  useEffect(() => {
-    if (data.length !== 0) return;
+  const reset = useCallback(() => {
     const newData: ManufacturedQuantityStatisticsData[] = Object.values(
       products,
     ).map(item => ({
@@ -60,6 +59,12 @@ const AddManufacturedStatistics = ({
 
     setData(newData);
   }, [products]);
+
+  useEffect(() => {
+    if (data.length !== 0 || Object.values(products).length === 0) return;
+
+    reset();
+  }, [reset, products, data]);
 
   const onEdit = useCallback((data: ManufacturedQuantityStatisticsData) => {
     setData(prev =>
@@ -91,6 +96,8 @@ const AddManufacturedStatistics = ({
         manufacturedQuantityStatistics: insertItems,
       }),
     );
+
+    reset();
 
     onClose();
   }, [dispatch, data, currentPeriod, projectId, onClose]);

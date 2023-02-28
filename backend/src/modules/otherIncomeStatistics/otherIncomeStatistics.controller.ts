@@ -37,6 +37,11 @@ export default class OtherIncomeStatisticsController {
 
     const periodIds = periods.map(item => item.id);
 
+    if (!periodIds.length) {
+      createResponse({ res, data: { otherIncomeStatistics: [] } });
+      return;
+    }
+
     const otherIncomeStatistics =
       await OtherIncomeStatisticsService.findByPeriodIds(periodIds);
 

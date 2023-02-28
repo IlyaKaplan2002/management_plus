@@ -60,9 +60,9 @@ const AddIncomeStatistics = ({ open, onClose }: AddIncomeStatisticsProps) => {
   }, [products]);
 
   useEffect(() => {
-    if (data.length !== 0) return;
+    if (data.length !== 0 || Object.values(products).length === 0) return;
     reset();
-  }, [reset, data]);
+  }, [reset, data, products]);
 
   const onEdit = useCallback((data: IncomeStatisticsData) => {
     setData(prev =>

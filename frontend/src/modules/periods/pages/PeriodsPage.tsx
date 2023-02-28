@@ -52,7 +52,9 @@ const PeriodsPage = () => {
       <Typography variant="h4" marginBottom="30px">
         Reporting periods
       </Typography>
-      <Button onClick={onStartNewPeriod}>Start new period</Button>
+      <Button onClick={onStartNewPeriod} sx={{ marginBottom: '20px' }}>
+        Start new period
+      </Button>
       <PeriodsPage.List>
         {Boolean(periods) &&
           Object.values(periods).map((item, indx) => (
