@@ -3,8 +3,6 @@ const namespace = 'STATISTICS';
 export const GET = `${namespace}/GET`;
 export const CREATE = `${namespace}/CREATE`;
 
-export type ChartFill = 'green' | 'red' | 'blue' | 'orange';
-
 export interface StatisticsCreate {
   costs: number;
   incomes: number;
@@ -30,21 +28,4 @@ export interface StatisticsState {
   };
   loading: boolean;
   error: string | null;
-}
-export interface ChartData {
-  label: string;
-  Profitability: number;
-  Costs: number;
-  Incomes: number;
-  fill: ChartFill;
-}
-
-export interface BrushData {
-  name: string;
-  value: number;
-}
-
-export interface FullChartData {
-  chartData: ChartData[];
-  brushData: BrushData[];
 }

@@ -1,6 +1,6 @@
 import { RootState } from '../types';
 import { fillMissedMonths, getSumForMonth } from './statistics.helpers';
-import { FullChartData } from './statistics.types';
+import { FullChartData } from '../types';
 const STATE_KEY = 'statistics';
 
 export default class StatisticsSelectors {

@@ -19,10 +19,14 @@ import { NormativePrice } from '../../../store/normativePrice/normativePrice.typ
 import { periodSchema } from '../schemas/periodSchema';
 import { useAppDispatch } from 'store';
 import { useParams } from 'react-router-dom';
+import { IncomeStatistics } from 'store/incomeStatistics/incomeStatistics.types';
+import { ManufacturedQuantityStatistics } from 'store/manufacturedQuantityStatistics/manufacturedQuantityStatistics.types';
 
 interface ProductTableRawProps {
   product: Product;
   periodId: string;
+  incomeStatistics: IncomeStatistics[];
+  manufacturedStatistics: ManufacturedQuantityStatistics[];
 }
 
 interface PeriodFormData {
@@ -30,7 +34,12 @@ interface PeriodFormData {
   plannedSellQuantity: string;
 }
 
-const PeriodTableRaw = ({ product, periodId }: ProductTableRawProps) => {
+const PeriodTableRaw = ({
+  product,
+  periodId,
+  incomeStatistics,
+  manufacturedStatistics,
+}: ProductTableRawProps) => {
   const { id: projectId } = useParams();
 
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -77,6 +86,21 @@ const PeriodTableRaw = ({ product, periodId }: ProductTableRawProps) => {
         ? plannedSellQuantities[Object.keys(plannedSellQuantities)[0]]
         : null,
     [plannedSellQuantities, plannedSellQuantityExists],
+  );
+
+  const totalSoldQuantity = useMemo(
+    () =>
+      incomeStatistics.reduce((acc, item) => acc + Number(item.quantity), 0),
+    [incomeStatistics],
+  );
+
+  const totalManufacturedQuantity = useMemo(
+    () =>
+      manufacturedStatistics.reduce(
+        (acc, item) => acc + Number(item.quantity),
+        0,
+      ),
+    [manufacturedStatistics],
   );
 
   const onSubmit = useCallback(
@@ -172,6 +196,8 @@ const PeriodTableRaw = ({ product, periodId }: ProductTableRawProps) => {
   return (
     <PeriodTableRaw.TableRow>
       <TableCell align="left">{product.name}</TableCell>
+      <TableCell align="left">{totalSoldQuantity}</TableCell>
+      <TableCell align="left">{totalManufacturedQuantity}</TableCell>
       <TableCell align="left">
         {editMode ? (
           <InputField

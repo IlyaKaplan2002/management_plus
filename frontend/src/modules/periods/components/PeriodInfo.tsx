@@ -14,6 +14,8 @@ import {
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import { incomeStatisticsSelectors } from 'store/incomeStatistics';
+import { manufacturedQuantityStatisticsSelectors } from 'store/manufacturedQuantityStatistics';
 import { periodsSelectors } from 'store/periods';
 import { productsSelectors } from 'store/products';
 import styled from 'styled-components';
@@ -41,6 +43,14 @@ const PeriodInfo = ({ open, periodId, onClose, number }: PeriodInfoProps) => {
 
   const products = useSelector(
     productsSelectors.getByProjectId(projectId || ''),
+  );
+
+  const incomeStatistics = useSelector(
+    incomeStatisticsSelectors.getByPeriodId(periodId),
+  );
+
+  const manufacturedStatistics = useSelector(
+    manufacturedQuantityStatisticsSelectors.getByPeriodId(periodId),
   );
 
   return (
@@ -74,6 +84,10 @@ const PeriodInfo = ({ open, periodId, onClose, number }: PeriodInfoProps) => {
                 <TableHead>
                   <TableRow>
                     <TableCell align="left">Product name</TableCell>
+                    <TableCell align="left">Sold in this period</TableCell>
+                    <TableCell align="left">
+                      Manufactured in this period
+                    </TableCell>
                     <TableCell align="left">Normative price</TableCell>
                     <TableCell align="left">Planned sales volume</TableCell>
                     <TableCell align="left" sx={{ width: 20 }} />
@@ -86,6 +100,12 @@ const PeriodInfo = ({ open, periodId, onClose, number }: PeriodInfoProps) => {
                         key={product.id}
                         product={product}
                         periodId={periodId}
+                        incomeStatistics={Object.values(
+                          incomeStatistics?.[product.id] || {},
+                        )}
+                        manufacturedStatistics={Object.values(
+                          manufacturedStatistics?.[product.id] || {},
+                        )}
                       />
                     );
                   })}
