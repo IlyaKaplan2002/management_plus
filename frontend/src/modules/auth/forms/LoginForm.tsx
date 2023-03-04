@@ -1,18 +1,17 @@
 import {
-  Alert,
-  AlertTitle,
   Button,
   CircularProgress,
   FormControl,
   FormHelperText,
+  IconButton,
   Input,
+  InputAdornment,
   InputLabel,
-  Snackbar,
   Typography,
 } from '@mui/material';
 import { useFormik } from 'formik';
 import styled from 'styled-components';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, MouseEvent } from 'react';
 import { loginSchema } from '../schemas/login';
 import { useAppDispatch } from '../../../store/index';
 import { authActions } from 'store/auth';
@@ -20,6 +19,8 @@ import useAuth from 'hooks/useAuth';
 import { LoginProps } from 'store/auth/auth.types';
 import { Link } from 'react-router-dom';
 import { routes } from 'modules/router/constants';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import ErrorAlert from 'components/ErrorAlert';
 
 const initialValues = {
   email: '',
@@ -32,6 +33,8 @@ const LoginForm = () => {
   const { error, loading } = useAuth();
 
   const [open, setOpen] = useState(false);
+
+  const [passwordShown, setPasswordShown] = useState(false);
 
   const onSubmit = useCallback(
     async (data: LoginProps) => {
@@ -72,12 +75,24 @@ const LoginForm = () => {
       <FormControl className="formItem">
         <InputLabel>Password</InputLabel>
         <Input
-          type="password"
+          type={passwordShown ? 'text' : 'password'}
           name="password"
           value={formik.values.password}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={Boolean(formik.errors.password) && formik.touched.password}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                onClick={() => setPasswordShown(prev => !prev)}
+                onMouseDown={(e: MouseEvent<HTMLButtonElement>) =>
+                  e.preventDefault()
+                }
+              >
+                {passwordShown ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          }
         />
         {Boolean(formik.errors.password) && formik.touched.password && (
           <FormHelperText className="error">
@@ -99,16 +114,7 @@ const LoginForm = () => {
         Don't have an account yet? Sign up right now
       </Typography>
 
-      <Snackbar
-        open={Boolean(error) && open}
-        autoHideDuration={6000}
-        onClose={() => setOpen(false)}
-      >
-        <Alert severity="error" onClose={() => setOpen(false)}>
-          <AlertTitle>Error</AlertTitle>
-          {error}
-        </Alert>
-      </Snackbar>
+      <ErrorAlert open={open} error={error} setOpen={setOpen} />
     </LoginForm.Container>
   );
 };

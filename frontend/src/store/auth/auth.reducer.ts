@@ -4,7 +4,7 @@ import { persistReducer, PersistConfig } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import authActions from './auth.actions';
 import { Action } from 'store/types';
-import { setToken, removeToken } from '../../api/index';
+import { setToken, removeToken } from 'api/index';
 
 const persistConfig: PersistConfig<AuthState> = {
   key: 'root',
@@ -18,6 +18,7 @@ const initialState: AuthState = {
   refreshToken: null,
   error: null,
   loading: false,
+  refreshing: false,
 };
 
 const reducer = createReducer(initialState, {
@@ -25,7 +26,7 @@ const reducer = createReducer(initialState, {
     ...state,
     loading: true,
   }),
-  [authActions.login.rejected.type]: (state: AuthState, action: Action) => ({
+  [authActions.login.rejected.type]: (_, action: Action) => ({
     ...initialState,
     error: action.payload,
   }),
@@ -45,7 +46,7 @@ const reducer = createReducer(initialState, {
     ...state,
     loading: true,
   }),
-  [authActions.register.rejected.type]: (state: AuthState, action: Action) => ({
+  [authActions.register.rejected.type]: (_, action: Action) => ({
     ...initialState,
     error: action.payload,
   }),
@@ -61,17 +62,11 @@ const reducer = createReducer(initialState, {
     };
   },
 
-  [authActions.getCurrentUser.pending.type]: (
-    state: AuthState,
-    action: Action,
-  ) => ({
+  [authActions.getCurrentUser.pending.type]: (state: AuthState) => ({
     ...state,
     loading: true,
   }),
-  [authActions.getCurrentUser.rejected.type]: (
-    state: AuthState,
-    action: Action,
-  ) => {
+  [authActions.getCurrentUser.rejected.type]: () => {
     removeToken();
     return initialState;
   },
@@ -90,17 +85,12 @@ const reducer = createReducer(initialState, {
     };
   },
 
-  [authActions.refreshToken.pending.type]: (
-    state: AuthState,
-    action: Action,
-  ) => ({
+  [authActions.refreshToken.pending.type]: (state: AuthState) => ({
     ...state,
     loading: true,
+    refreshing: true,
   }),
-  [authActions.refreshToken.rejected.type]: (
-    state: AuthState,
-    action: Action,
-  ) => {
+  [authActions.refreshToken.rejected.type]: () => {
     removeToken();
     return initialState;
   },
@@ -115,6 +105,7 @@ const reducer = createReducer(initialState, {
       token: action.payload.token,
       refreshToken: action.payload.refreshToken,
       loading: false,
+      refreshing: false,
       error: null,
     };
   },
@@ -123,16 +114,23 @@ const reducer = createReducer(initialState, {
     ...state,
     loading: true,
   }),
+  [authActions.logout.rejected.type]: () => {
+    removeToken();
+    return initialState;
+  },
   [authActions.logout.fulfilled.type]: () => {
     removeToken();
     return initialState;
   },
 
-  'persist/REHYDRATE': (_, action: Action) => {
-    const { token } = action.payload;
+  'persist/REHYDRATE': (state: AuthState, action: Action) => {
+    const { payload } = action;
+    if (!payload) return { ...state };
+    const { token } = payload;
     if (token) {
       setToken(token);
     }
+    return { ...state };
   },
 });
 

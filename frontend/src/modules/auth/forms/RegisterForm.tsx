@@ -1,18 +1,17 @@
 import {
-  Alert,
-  AlertTitle,
   Button,
   CircularProgress,
   FormControl,
   FormHelperText,
+  IconButton,
   Input,
+  InputAdornment,
   InputLabel,
-  Snackbar,
   Typography,
 } from '@mui/material';
 import { useFormik } from 'formik';
 import styled from 'styled-components';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, MouseEvent } from 'react';
 import { useAppDispatch } from 'store/index';
 import { authActions } from 'store/auth';
 import useAuth from 'hooks/useAuth';
@@ -20,6 +19,8 @@ import { RegisterProps } from 'store/auth/auth.types';
 import { registerSchema } from '../schemas/register';
 import { Link } from 'react-router-dom';
 import { routes } from 'modules/router/constants';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import ErrorAlert from 'components/ErrorAlert';
 
 const initialValues = {
   email: '',
@@ -35,6 +36,8 @@ const RegisterForm = () => {
   const { error, loading } = useAuth();
 
   const [open, setOpen] = useState(false);
+  const [passwordShown, setPasswordShown] = useState(false);
+  const [passwordConfirmShown, setPasswordConfirmShown] = useState(false);
 
   const onSubmit = useCallback(
     async (data: RegisterProps) => {
@@ -116,12 +119,24 @@ const RegisterForm = () => {
       <FormControl className="formItem">
         <InputLabel>Password</InputLabel>
         <Input
-          type="password"
+          type={passwordShown ? 'text' : 'password'}
           name="password"
           value={formik.values.password}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={Boolean(formik.errors.password) && formik.touched.password}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                onClick={() => setPasswordShown(prev => !prev)}
+                onMouseDown={(e: MouseEvent<HTMLButtonElement>) =>
+                  e.preventDefault()
+                }
+              >
+                {passwordShown ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          }
         />
         {Boolean(formik.errors.password) && formik.touched.password && (
           <FormHelperText className="error">
@@ -133,7 +148,7 @@ const RegisterForm = () => {
       <FormControl className="formItem">
         <InputLabel>Confirm password</InputLabel>
         <Input
-          type="password"
+          type={passwordConfirmShown ? 'text' : 'password'}
           name="passwordConfirm"
           value={formik.values.passwordConfirm}
           onChange={formik.handleChange}
@@ -141,6 +156,18 @@ const RegisterForm = () => {
           error={
             Boolean(formik.errors.passwordConfirm) &&
             formik.touched.passwordConfirm
+          }
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                onClick={() => setPasswordConfirmShown(prev => !prev)}
+                onMouseDown={(e: MouseEvent<HTMLButtonElement>) =>
+                  e.preventDefault()
+                }
+              >
+                {passwordConfirmShown ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
           }
         />
         {Boolean(formik.errors.passwordConfirm) &&
@@ -164,16 +191,7 @@ const RegisterForm = () => {
         Already have an account? Log in right now
       </Typography>
 
-      <Snackbar
-        open={Boolean(error) && open}
-        autoHideDuration={6000}
-        onClose={() => setOpen(false)}
-      >
-        <Alert severity="error" onClose={() => setOpen(false)}>
-          <AlertTitle>Error</AlertTitle>
-          {error}
-        </Alert>
-      </Snackbar>
+      <ErrorAlert open={open} error={error} setOpen={setOpen} />
     </RegisterForm.Container>
   );
 };
