@@ -112,7 +112,7 @@ const DefaultLayout = ({
               open={Boolean(anchorEl)}
               onClose={onClose}
             >
-              <MenuItem onClick={onClose}>Profile</MenuItem>
+              {/* <MenuItem onClick={onClose}>Profile</MenuItem> */}
               <MenuItem onClick={onLogout}>Logout</MenuItem>
             </Menu>
           </div>
