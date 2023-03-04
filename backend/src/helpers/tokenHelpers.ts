@@ -6,7 +6,7 @@ interface UserIdJwtPayload extends JwtPayload {
 
 const { TOKEN_SECRET } = process.env;
 
-export const generateToken = (id: string, expirationTime = 3600) =>
+export const generateToken = (id: string, expirationTime = 5184000) =>
   sign({ id }, TOKEN_SECRET, { expiresIn: expirationTime });
 
 export const verifyToken = (

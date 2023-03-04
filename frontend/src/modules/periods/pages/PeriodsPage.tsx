@@ -5,6 +5,10 @@ import { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch } from 'store';
+import { costsStatisticsSelectors } from 'store/costsStatistics';
+import { incomeStatisticsSelectors } from 'store/incomeStatistics';
+import { manufacturedQuantityStatisticsSelectors } from 'store/manufacturedQuantityStatistics';
+import { otherIncomeStatisticsSelectors } from 'store/otherIncomeStatistics';
 import { periodsActions, periodsSelectors } from 'store/periods';
 import styled from 'styled-components';
 import PeriodInfo from '../components/PeriodInfo';
@@ -21,6 +25,23 @@ const PeriodsPage = () => {
   );
 
   const periods = useSelector(periodsSelectors.getByProjectId(projectId || ''));
+
+  const incomeStatistics = useSelector(
+    incomeStatisticsSelectors.getTotalIncomesByPeriods(projectId || ''),
+  );
+  const manufacturedStatistics = useSelector(
+    manufacturedQuantityStatisticsSelectors.getTotalManufacturedCostsByPeriods(
+      projectId || '',
+    ),
+  );
+  const otherIncomeStatistics = useSelector(
+    otherIncomeStatisticsSelectors.getTotalOtherIncomeByPeriods(
+      projectId || '',
+    ),
+  );
+  const costsStatistics = useSelector(
+    costsStatisticsSelectors.getTotalCostsByPeriods(projectId || ''),
+  );
 
   const onStartNewPeriod = useCallback(() => {
     if (!projectId) return;
@@ -57,27 +78,52 @@ const PeriodsPage = () => {
       </Button>
       <PeriodsPage.List>
         {Boolean(periods) &&
-          Object.values(periods).map((item, indx) => (
-            <PeriodsPage.Item
-              key={item.id}
-              onClick={() => setOpenedPeriod(item.id)}
-            >
-              <p>
-                {Object.values(periods).length - indx}{' '}
-                {item.id === currentPeriod?.id && '(Current)'}
-              </p>
-              <p>
-                Start date:{' '}
-                {dayjs(item.startDate).format('DD/MM/YYYY hh:mm:ss')}
-              </p>
-              <p>
-                {item.endDate &&
-                  `End date: ${dayjs(item.endDate).format(
-                    'DD/MM/YYYY hh:mm:ss',
-                  )}`}
-              </p>
-            </PeriodsPage.Item>
-          ))}
+          Object.values(periods)
+            .sort(
+              (a, b) =>
+                new Date(b.startDate).getTime() -
+                new Date(a.startDate).getTime(),
+            )
+            .map((item, indx) => (
+              <PeriodsPage.Item
+                key={item.id}
+                onClick={() => setOpenedPeriod(item.id)}
+              >
+                <p>
+                  {Object.values(periods).length - indx}{' '}
+                  {item.id === currentPeriod?.id && '(Current)'}
+                </p>
+                <p>
+                  Start date:{' '}
+                  {dayjs(item.startDate).format('DD/MM/YYYY hh:mm:ss')}
+                </p>
+                <p style={{ opacity: item.endDate ? 1 : 0 }}>
+                  End date:{' '}
+                  {item.endDate &&
+                    dayjs(item.endDate).format('DD/MM/YYYY hh:mm:ss')}
+                </p>
+
+                <p>
+                  Total income:{' '}
+                  {(incomeStatistics[item.id].income || 0) +
+                    (otherIncomeStatistics[item.id] || 0)}
+                </p>
+
+                <p>
+                  Total costs:{' '}
+                  {(costsStatistics[item.id] || 0) +
+                    (manufacturedStatistics[item.id] || 0)}
+                </p>
+
+                <p>
+                  Total profit:{' '}
+                  {(incomeStatistics[item.id].income || 0) +
+                    (otherIncomeStatistics[item.id] || 0) -
+                    (costsStatistics[item.id] || 0) +
+                    (manufacturedStatistics[item.id] || 0)}
+                </p>
+              </PeriodsPage.Item>
+            ))}
       </PeriodsPage.List>
 
       <PeriodInfo
@@ -101,7 +147,7 @@ PeriodsPage.Item = styled.li`
   align-items: flex-start;
   justify-content: space-between;
   width: 296px;
-  height: 150px;
+  height: 250px;
   padding: 20px 20px 12px;
   box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
   border-radius: 8px;

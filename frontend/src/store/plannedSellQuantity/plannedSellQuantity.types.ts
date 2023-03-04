@@ -21,7 +21,7 @@ export type PlannedSellQuantity = PlannedSellQuantityCreate & {
 export interface PlannedSellQuantityState {
   items: {
     [periodId: string]: {
-      [key: string]: PlannedSellQuantity;
+      [productId: string]: { [key: string]: PlannedSellQuantity };
     };
   };
   loading: boolean;
