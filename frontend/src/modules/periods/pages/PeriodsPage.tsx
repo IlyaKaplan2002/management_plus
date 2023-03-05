@@ -105,7 +105,7 @@ const PeriodsPage = () => {
 
                 <p>
                   Total income:{' '}
-                  {(incomeStatistics[item.id].income || 0) +
+                  {(incomeStatistics[item.id]?.income || 0) +
                     (otherIncomeStatistics[item.id] || 0)}
                 </p>
 
@@ -117,7 +117,7 @@ const PeriodsPage = () => {
 
                 <p>
                   Total profit:{' '}
-                  {(incomeStatistics[item.id].income || 0) +
+                  {(incomeStatistics[item.id]?.income || 0) +
                     (otherIncomeStatistics[item.id] || 0) -
                     (costsStatistics[item.id] || 0) +
                     (manufacturedStatistics[item.id] || 0)}
